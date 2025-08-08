@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webikos - Saukr</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #4a5568;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+        
+        .highlight {
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #666;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature {
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .feature h3 {
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cta {
+            margin-top: 3rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: transform 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vítejte na <span class="highlight">Webikos</span></h1>
+        <p>Moderní webové řešení od <strong>Saukr</strong></p>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>🚀 Rychlé</h3>
+                <p>Optimalizováno pro maximální výkon</p>
+            </div>
+            <div class="feature">
+                <h3>📱 Responzivní</h3>
+                <p>Perfektní na všech zařízeních</p>
+            </div>
+            <div class="feature">
+                <h3>🎨 Moderní</h3>
+                <p>Současný design a technologie</p>
+            </div>
+        </div>
+        
+        <div class="cta">
+            <a href="#" class="btn">Začít hned</a>
+        </div>
+        
+        <footer>
+            <p>&copy; 2024 Webikos by Saukr. Všechna práva vyhrazena.</p>
+            <p>Nasazeno na Vercel 🚀</p>
+        </footer>
+    </div>
+</body>
+</html>
