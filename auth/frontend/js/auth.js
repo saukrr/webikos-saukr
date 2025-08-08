@@ -40,7 +40,14 @@ class AuthManager {
                     method: 'GET',
                     credentials: 'include'
                 });
-                const data = await res.json();
+                const text = await res.text();
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    console.warn('CSRF response not JSON, got:', text.slice(0, 120));
+                    throw e;
+                }
                 if (data.success) {
                     this.csrfToken = data.token;
                 }

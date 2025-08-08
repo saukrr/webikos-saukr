@@ -95,7 +95,8 @@ class LoginManager {
      * Make login API request
      */
     async makeLoginRequest(data) {
-        const response = await fetch('/auth/backend/controllers/AuthController.php?action=login', {
+        const apiBase = (window.authManager && window.authManager.apiBase) || '/auth/backend/controllers';
+        const response = await fetch(`${apiBase}/AuthController.php?action=login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -125,7 +126,8 @@ class LoginManager {
         button.disabled = true;
 
         // Redirect to social auth endpoint
-        const redirectUrl = `/auth/backend/controllers/SocialAuthController.php?provider=${provider}`;
+        const apiBase = (window.authManager && window.authManager.apiBase) || '/auth/backend/controllers';
+        const redirectUrl = `${apiBase}/SocialAuthController.php?provider=${provider}`;
         
         // Store current page for redirect after auth
         sessionStorage.setItem('auth_redirect', window.location.href);
@@ -162,11 +164,13 @@ class LoginManager {
      */
     async checkFlashMessages() {
         try {
-            const response = await fetch('/auth/backend/controllers/AuthController.php?action=getFlashMessage', {
+            const apiBase = (window.authManager && window.authManager.apiBase) || '/auth/backend/controllers';
+            const response = await fetch(`${apiBase}/AuthController.php?action=getFlashMessage`, {
                 method: 'GET',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
-                }
+                },
+                credentials: 'include'
             });
 
             if (response.ok) {

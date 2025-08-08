@@ -178,7 +178,8 @@ class RegisterManager {
      * Make registration API request
      */
     async makeRegistrationRequest(data) {
-        const response = await fetch('/auth/backend/controllers/AuthController.php?action=register', {
+        const apiBase = (window.authManager && window.authManager.apiBase) || '/auth/backend/controllers';
+        const response = await fetch(`${apiBase}/AuthController.php?action=register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -264,12 +265,14 @@ class RegisterManager {
         }
 
         try {
-            const response = await fetch('/auth/backend/controllers/AuthController.php?action=checkEmail', {
+            const apiBase = (window.authManager && window.authManager.apiBase) || '/auth/backend/controllers';
+            const response = await fetch(`${apiBase}/AuthController.php?action=checkEmail`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'X-Requested-With': 'XMLHttpRequest'
                 },
+                credentials: 'include',
                 body: new URLSearchParams({ email: email })
             });
 
@@ -297,12 +300,14 @@ class RegisterManager {
         }
 
         try {
-            const response = await fetch('/auth/backend/controllers/AuthController.php?action=checkUsername', {
+            const apiBase = (window.authManager && window.authManager.apiBase) || '/auth/backend/controllers';
+            const response = await fetch(`${apiBase}/AuthController.php?action=checkUsername`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'X-Requested-With': 'XMLHttpRequest'
                 },
+                credentials: 'include',
                 body: new URLSearchParams({ username: username })
             });
 
@@ -346,7 +351,8 @@ class RegisterManager {
         sessionStorage.setItem('social_auth_intent', 'register');
 
         // Redirect to social auth endpoint
-        const redirectUrl = `/auth/backend/controllers/SocialAuthController.php?provider=${provider}&intent=register`;
+        const apiBase = (window.authManager && window.authManager.apiBase) || '/auth/backend/controllers';
+        const redirectUrl = `${apiBase}/SocialAuthController.php?provider=${provider}&intent=register`;
         
         // Store current page for redirect after auth
         sessionStorage.setItem('auth_redirect', window.location.href);
