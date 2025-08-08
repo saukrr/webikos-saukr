@@ -274,12 +274,14 @@ class RegisterManager {
             });
 
             const result = await response.json();
-            const emailField = document.getElementById('email');
+            const emailField = document.getElementById('regEmail') || document.getElementById('email');
 
-            if (result.exists) {
-                window.authManager.showFieldError(emailField, 'Tento e-mail je již registrován');
-            } else {
-                window.authManager.showFieldSuccess(emailField);
+            if (emailField) {
+                if (result.exists) {
+                    window.authManager.showFieldError(emailField, 'Tento e-mail je již registrován');
+                } else {
+                    window.authManager.showFieldSuccess(emailField);
+                }
             }
         } catch (error) {
             console.error('Email check failed:', error);
