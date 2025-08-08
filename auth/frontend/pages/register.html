@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrace - Webikos</title>
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="csrf-token" content="">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-header">
+            <div class="auth-logo">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <h1 class="auth-title">Vytvořte účet</h1>
+            <p class="auth-subtitle">Připojte se k Webikos</p>
+        </div>
+
+        <form class="auth-form" id="registerForm">
+            <div class="alert alert-error" id="errorAlert"></div>
+            <div class="alert alert-success" id="successAlert"></div>
+
+            <!-- Social Registration Buttons -->
+            <div class="social-login">
+                <button type="button" class="btn btn-social btn-google" id="googleRegister">
+                    <i class="fab fa-google"></i>
+                    Registrovat s Google
+                </button>
+                <button type="button" class="btn btn-social btn-discord" id="discordRegister">
+                    <i class="fab fa-discord"></i>
+                    Registrovat s Discord
+                </button>
+            </div>
+
+            <div class="social-divider">
+                <span>nebo</span>
+            </div>
+
+            <!-- Name Fields -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName" class="form-label">Jméno</label>
+                    <div class="input-group">
+                        <i class="fas fa-user input-icon"></i>
+                        <input 
+                            type="text" 
+                            id="firstName" 
+                            name="first_name" 
+                            class="form-input" 
+                            placeholder="Vaše jméno"
+                            autocomplete="given-name"
+                        >
+                    </div>
+                    <div class="form-error" id="firstNameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName" class="form-label">Příjmení</label>
+                    <div class="input-group">
+                        <i class="fas fa-user input-icon"></i>
+                        <input 
+                            type="text" 
+                            id="lastName" 
+                            name="last_name" 
+                            class="form-input" 
+                            placeholder="Vaše příjmení"
+                            autocomplete="family-name"
+                        >
+                    </div>
+                    <div class="form-error" id="lastNameError"></div>
+                </div>
+            </div>
+
+            <!-- Username Input -->
+            <div class="form-group">
+                <label for="username" class="form-label">Uživatelské jméno</label>
+                <div class="input-group">
+                    <i class="fas fa-at input-icon"></i>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        class="form-input" 
+                        placeholder="uzivatelske_jmeno"
+                        required
+                        autocomplete="username"
+                    >
+                </div>
+                <div class="form-error" id="usernameError"></div>
+                <div class="form-help">Pouze písmena, čísla a podtržítka</div>
+            </div>
+
+            <!-- Email Input -->
+            <div class="form-group">
+                <label for="email" class="form-label">E-mailová adresa</label>
+                <div class="input-group">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="form-input" 
+                        placeholder="vas@email.com"
+                        required
+                        autocomplete="email"
+                    >
+                </div>
+                <div class="form-error" id="emailError"></div>
+            </div>
+
+            <!-- Password Input -->
+            <div class="form-group">
+                <label for="password" class="form-label">Heslo</label>
+                <div class="input-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="form-input" 
+                        placeholder="Silné heslo"
+                        required
+                        autocomplete="new-password"
+                    >
+                    <button type="button" class="password-toggle" id="passwordToggle">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="form-error" id="passwordError"></div>
+                <div class="password-strength" id="passwordStrength"></div>
+            </div>
+
+            <!-- Confirm Password Input -->
+            <div class="form-group">
+                <label for="passwordConfirm" class="form-label">Potvrdit heslo</label>
+                <div class="input-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input 
+                        type="password" 
+                        id="passwordConfirm" 
+                        name="password_confirm" 
+                        class="form-input" 
+                        placeholder="Potvrďte heslo"
+                        required
+                        autocomplete="new-password"
+                    >
+                    <button type="button" class="password-toggle" id="passwordConfirmToggle">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="form-error" id="passwordConfirmError"></div>
+            </div>
+
+            <!-- Terms and Conditions -->
+            <div class="form-checkbox">
+                <input type="checkbox" id="termsAccepted" name="terms_accepted" required>
+                <label for="termsAccepted">
+                    Souhlasím s <a href="#" target="_blank">podmínkami použití</a> 
+                    a <a href="#" target="_blank">zásadami ochrany osobních údajů</a>
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary" id="registerBtn">
+                <span class="loading-spinner" id="registerSpinner"></span>
+                <span id="registerBtnText">Vytvořit účet</span>
+            </button>
+
+            <!-- CSRF Token -->
+            <input type="hidden" name="_token" id="csrfToken">
+        </form>
+
+        <div class="auth-footer">
+            <p>Už máte účet? <a href="login.html">Přihlaste se</a></p>
+            <p><a href="../../../index.html">← Zpět na hlavní stránku</a></p>
+        </div>
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script src="../js/register.js"></script>
+</body>
+</html>
+
+<style>
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-help {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+.password-strength {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.password-strength.weak {
+    color: var(--error-color);
+}
+
+.password-strength.medium {
+    color: var(--warning-color);
+}
+
+.password-strength.strong {
+    color: var(--success-color);
+}
+
+.form-checkbox label a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.form-checkbox label a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .form-row .form-group {
+        margin-bottom: 1.5rem;
+    }
+}
+</style>
