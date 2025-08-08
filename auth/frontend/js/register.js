@@ -42,9 +42,9 @@ class RegisterManager {
      * Setup real-time validation for specific fields
      */
     setupRealTimeValidation() {
-        const emailField = document.getElementById('email');
+        const emailField = document.getElementById('regEmail') || document.getElementById('email');
         const usernameField = document.getElementById('username');
-        const passwordField = document.getElementById('password');
+        const passwordField = document.getElementById('regPassword') || document.getElementById('password');
         const passwordConfirmField = document.getElementById('passwordConfirm');
 
         // Email availability check
@@ -87,7 +87,7 @@ class RegisterManager {
      * Setup password validation and strength indicator
      */
     setupPasswordValidation() {
-        const passwordField = document.getElementById('password');
+        const passwordField = document.getElementById('regPassword') || document.getElementById('password');
         if (!passwordField) return;
 
         passwordField.addEventListener('input', (e) => {
@@ -226,9 +226,10 @@ class RegisterManager {
      * Validate password match
      */
     validatePasswordMatch() {
-        const password = document.getElementById('password').value;
-        const passwordConfirm = document.getElementById('passwordConfirm').value;
+        const passwordEl = document.getElementById('regPassword') || document.getElementById('password');
         const confirmField = document.getElementById('passwordConfirm');
+        const password = passwordEl ? passwordEl.value : '';
+        const passwordConfirm = confirmField ? confirmField.value : '';
 
         if (passwordConfirm && password !== passwordConfirm) {
             window.authManager.showFieldError(confirmField, 'Hesla se neshodují');
