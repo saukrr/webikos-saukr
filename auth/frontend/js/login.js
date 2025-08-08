@@ -101,6 +101,7 @@ class LoginManager {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-Requested-With': 'XMLHttpRequest'
             },
+            credentials: 'include',
             body: new URLSearchParams(data)
         });
 

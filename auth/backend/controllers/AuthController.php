@@ -6,6 +6,8 @@
 
 require_once __DIR__ . '/../config/config.php';
 
+handleCors();
+
 // Handle API requests
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
 $controller = new AuthController();

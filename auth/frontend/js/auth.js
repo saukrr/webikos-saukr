@@ -4,8 +4,13 @@
  */
 
 class AuthManager {
-    constructor() {
-        this.apiBase = '/auth/backend/controllers';
+    constructor(options = {}) {
+        this.apiBase = options.apiBase || '/auth/backend/controllers';
+        // Allow setting via <meta name="api-base" content="https://your-php-host/auth/backend/controllers">
+        const metaApi = document.querySelector('meta[name="api-base"]');
+        if (metaApi && metaApi.content) {
+            this.apiBase = metaApi.content.replace(/\/$/, '');
+        }
         this.csrfToken = this.getCSRFToken();
         this.init();
     }
@@ -27,11 +32,29 @@ class AuthManager {
     /**
      * Setup CSRF token in forms
      */
-    setupCSRF() {
+    async setupCSRF() {
+        try {
+            // Fetch token from server if not present
+            if (!this.csrfToken) {
+                const res = await fetch(`${this.apiBase}/CsrfController.php`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                const data = await res.json();
+                if (data.success) {
+                    this.csrfToken = data.token;
+                }
+            }
+        } catch (e) {
+            console.warn('CSRF token fetch failed', e);
+        }
+
         const csrfInputs = document.querySelectorAll('input[name="_token"]');
         csrfInputs.forEach(input => {
             input.value = this.csrfToken;
         });
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        if (meta) meta.setAttribute('content', this.csrfToken);
     }
 
     /**
@@ -295,11 +318,12 @@ class AuthManager {
             const response = await fetch(`${this.apiBase}/${endpoint}`, {
                 method: method,
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRF-Token': this.csrfToken
                 },
-                body: method !== 'GET' ? JSON.stringify(data) : undefined
+                credentials: 'include',
+                body: method !== 'GET' ? new URLSearchParams(data) : undefined
             });
 
             const result = await response.json();
