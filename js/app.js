@@ -38,30 +38,7 @@ class WebikosApp {
     async loadUserProfile(user) {
         console.log('loadUserProfile called for user:', user.id);
 
-        // EMERGENCY: Use hardcoded profile immediately for your user
-        if (user.id === 'cc25b0a4-448f-4484-9128-516d870b22ef') {
-            console.log('Using emergency hardcoded profile for backsaukr');
-            const emergencyProfile = {
-                id: 'cc25b0a4-448f-4484-9128-516d870b22ef',
-                username: 'backsaukr',
-                display_name: 'backsaukr',
-                bio: 'Nový uživatel na Webikos!',
-                avatar_url: null,
-                created_at: '2025-08-11T05:15:06.003015+00:00',
-                updated_at: '2025-08-11T05:15:06.003015+00:00'
-            };
 
-            this.currentProfile = emergencyProfile;
-
-            if (window.profileManager) {
-                window.profileManager.currentProfile = emergencyProfile;
-                console.log('ProfileManager updated with emergency profile');
-            }
-
-            this.updateUserInterface(emergencyProfile);
-            console.log('Emergency profile loaded successfully');
-            return emergencyProfile;
-        }
 
         try {
             console.log('Querying user_profiles table...');

@@ -101,10 +101,21 @@ class ProfileManager {
         const newForm = form.cloneNode(true);
         form.parentNode.replaceChild(newForm, form);
 
-        newForm.addEventListener('submit', (e) => {
+        newForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const submitBtn = newForm.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                const originalText = submitBtn.textContent;
+                submitBtn.dataset.originalText = originalText;
+                submitBtn.innerHTML = '<span class="loading-spinner"></span> Ukládání...';
+            }
             console.log('Form submitted, calling saveProfile...');
-            this.saveProfile();
+            await this.saveProfile();
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = submitBtn.dataset.originalText || 'Uložit změny';
+            }
         });
 
         // Bio character counter
@@ -359,7 +370,8 @@ class ProfileManager {
 
         } catch (error) {
             console.error('Error saving profile:', error);
-            this.app.showNotification('Chyba při ukládání profilu', 'error');
+            const msg = error?.message || (error?.hint ? `${error.hint}` : 'Chyba při ukládání profilu');
+            this.app.showNotification(msg, 'error');
         }
     }
 
