@@ -384,27 +384,48 @@ class WebikosApp {
     async loadPosts(offset = 0, limit = 20) {
         console.log('Loading posts...', { offset, limit });
         try {
-            // Use direct REST API call to avoid Supabase-js JOIN syntax issues
-            const accessToken = (await this.supabase.auth.getSession()).data.session?.access_token;
-            const response = await fetch(`${window.SUPABASE_URL}/rest/v1/posts?select=*,user_profiles(username,display_name,avatar_url)&order=created_at.desc&limit=${limit}&offset=${offset}`, {
-                headers: {
-                    'apikey': window.SUPABASE_ANON_KEY,
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
-                }
+            // Load posts first, then get user profiles separately since FK points to auth.users not user_profiles
+            const { data: posts, error } = await this.supabase
+                .from('posts')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .range(offset, offset + limit - 1);
+
+            if (error) throw error;
+
+            // Get unique user IDs from posts
+            const userIds = [...new Set(posts.map(post => post.user_id))];
+
+            // Load user profiles for these users
+            const { data: profiles, error: profileError } = await this.supabase
+                .from('user_profiles')
+                .select('id, username, display_name, avatar_url')
+                .in('id', userIds);
+
+            if (profileError) throw profileError;
+
+            // Create a map of user profiles
+            const profileMap = {};
+            profiles.forEach(profile => {
+                profileMap[profile.id] = profile;
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
+            // Attach user profiles to posts
+            const postsWithProfiles = posts.map(post => ({
+                ...post,
+                user_profiles: profileMap[post.user_id] || {
+                    username: 'unknown',
+                    display_name: 'Unknown User',
+                    avatar_url: null
+                }
+            }));
 
-            const posts = await response.json();
-            console.log('Posts query result:', { posts, error: null });
+            console.log('Posts with profiles loaded:', postsWithProfiles.length);
 
             if (offset === 0) {
-                this.posts = posts || [];
+                this.posts = postsWithProfiles || [];
             } else {
-                this.posts = [...this.posts, ...(posts || [])];
+                this.posts = [...this.posts, ...(postsWithProfiles || [])];
             }
 
             console.log('Total posts loaded:', this.posts.length);
