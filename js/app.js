@@ -9,16 +9,20 @@ class WebikosApp {
     }
 
     async showDashboard(user) {
+        console.log('Showing dashboard for user:', user);
         this.currentUser = user;
-        
+
         // Hide auth section and show app
         document.getElementById('auth-section').style.display = 'none';
         document.getElementById('app-section').classList.add('active');
         document.body.className = 'app-page';
-        
+
+        // Show loading indicator
+        this.showNotification('Načítání profilu...', 'info');
+
         // Load user profile
         await this.loadUserProfile(user);
-        
+
         // Initialize app components after a short delay to ensure DOM is ready
         setTimeout(() => {
             this.initializeApp();
@@ -72,7 +76,16 @@ class WebikosApp {
 
                 this.updateUserInterface(profile);
             } else {
-                console.warn('No profile data available');
+                console.warn('No profile data available, creating fallback profile');
+                // Create a fallback profile for testing
+                const fallbackProfile = {
+                    id: user.id,
+                    username: user.email.split('@')[0],
+                    display_name: user.email.split('@')[0],
+                    bio: 'Nový uživatel na Webikos! 🎉'
+                };
+                this.currentProfile = fallbackProfile;
+                this.updateUserInterface(fallbackProfile);
             }
         } catch (error) {
             console.error('Error loading profile:', error);
@@ -134,12 +147,49 @@ class WebikosApp {
     }
 
     initializeApp() {
+        console.log('Initializing app components...');
         this.setupComposeTweet();
         this.setupMediaUpload();
         this.setupProfileEdit();
         this.setupFollowButtons();
+        this.setupRefreshButton();
         this.loadPosts();
         this.setupInfiniteScroll();
+        console.log('App initialization complete');
+    }
+
+    setupRefreshButton() {
+        // Add a refresh button for debugging
+        const header = document.querySelector('.header-content');
+        if (header && !document.getElementById('refresh-btn')) {
+            const refreshBtn = document.createElement('button');
+            refreshBtn.id = 'refresh-btn';
+            refreshBtn.textContent = '🔄 Refresh';
+            refreshBtn.style.cssText = `
+                background: var(--twitter-green);
+                color: white;
+                border: none;
+                padding: 0.5rem 1rem;
+                border-radius: 20px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                margin-left: 1rem;
+            `;
+            refreshBtn.addEventListener('click', () => {
+                console.log('Manual refresh triggered');
+                this.refreshUserData();
+            });
+            header.appendChild(refreshBtn);
+        }
+    }
+
+    async refreshUserData() {
+        console.log('Refreshing user data...');
+        if (this.currentUser) {
+            await this.loadUserProfile(this.currentUser);
+            await this.loadPosts(0, 20);
+            this.showNotification('Data refreshed!', 'success');
+        }
     }
 
     setupComposeTweet() {
@@ -713,4 +763,43 @@ window.openImageModal = (imageUrl) => {
     modal.addEventListener('click', () => {
         document.body.removeChild(modal);
     });
+};
+
+// Diagnostic function for debugging
+window.webikosDebug = () => {
+    console.log('=== WEBIKOS DEBUG INFO ===');
+    console.log('Current user:', window.app?.currentUser);
+    console.log('Current profile:', window.app?.currentProfile);
+    console.log('Posts loaded:', window.app?.posts?.length || 0);
+    console.log('Auth manager:', window.auth);
+    console.log('Profile manager:', window.profileManager);
+
+    // Check DOM elements
+    const elements = {
+        'auth-section': document.getElementById('auth-section'),
+        'app-section': document.getElementById('app-section'),
+        'user-display-name': document.getElementById('user-display-name'),
+        'user-username-display': document.getElementById('user-username-display'),
+        'user-bio': document.getElementById('user-bio'),
+        'posts-container': document.getElementById('posts-container'),
+        'edit-profile-btn': document.querySelector('.edit-profile-btn')
+    };
+
+    console.log('DOM elements:', elements);
+
+    // Check for missing elements
+    Object.entries(elements).forEach(([name, element]) => {
+        if (!element) {
+            console.warn(`Missing element: ${name}`);
+        }
+    });
+
+    console.log('=== END DEBUG INFO ===');
+
+    return {
+        user: window.app?.currentUser,
+        profile: window.app?.currentProfile,
+        posts: window.app?.posts?.length || 0,
+        elements
+    };
 };

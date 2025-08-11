@@ -211,13 +211,27 @@
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // Initialize application modules
-        window.auth = new AuthManager(supabase);
-        window.app = new WebikosApp(supabase);
-        window.profileManager = new ProfileManager(supabase, window.app);
+        console.log('Initializing Webikos application...');
+        console.log('Supabase client:', supabase);
+
+        try {
+            window.auth = new AuthManager(supabase);
+            console.log('AuthManager initialized:', window.auth);
+
+            window.app = new WebikosApp(supabase);
+            console.log('WebikosApp initialized:', window.app);
+
+            window.profileManager = new ProfileManager(supabase, window.app);
+            console.log('ProfileManager initialized:', window.profileManager);
+
+            console.log('All modules initialized successfully');
+        } catch (error) {
+            console.error('Error initializing modules:', error);
+        }
 
         // Wait for DOM to be ready
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('Webikos app initialized');
+            console.log('DOM ready, Webikos app fully initialized');
         });
     </script>
 </body>
