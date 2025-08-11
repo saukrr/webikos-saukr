@@ -105,7 +105,7 @@ class AuthManager {
             
             if (event === 'SIGNED_IN' && session) {
                 this.currentUser = session.user;
-                
+
                 // Store session info if remember me is enabled
                 if (this.rememberMe) {
                     localStorage.setItem('webikos_user_session', JSON.stringify({
@@ -113,8 +113,14 @@ class AuthManager {
                         userId: session.user.id
                     }));
                 }
-                
-                await window.app.showDashboard(session.user);
+
+                console.log('Calling showDashboard for user:', session.user);
+                console.log('window.app available:', window.app);
+                if (window.app) {
+                    await window.app.showDashboard(session.user);
+                } else {
+                    console.error('window.app not available!');
+                }
             } else if (event === 'SIGNED_OUT') {
                 this.currentUser = null;
                 this.clearStoredSession();

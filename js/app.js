@@ -9,6 +9,7 @@ class WebikosApp {
     }
 
     async showDashboard(user) {
+        console.log('showDashboard called with user:', user);
         this.currentUser = user;
 
         // Hide auth section and show app
@@ -16,23 +17,31 @@ class WebikosApp {
         document.getElementById('app-section').classList.add('active');
         document.body.className = 'app-page';
 
+        console.log('Loading user profile...');
         // Load user profile
         await this.loadUserProfile(user);
 
+        console.log('Initializing app...');
         // Initialize app
         this.initializeApp();
+        console.log('Dashboard setup complete');
     }
 
     async loadUserProfile(user) {
+        console.log('loadUserProfile called for user:', user.id);
         try {
+            console.log('Querying user_profiles table...');
             let { data: profile, error } = await this.supabase
                 .from('user_profiles')
                 .select('*')
                 .eq('id', user.id)
                 .single();
 
+            console.log('Profile query result:', { profile, error });
+
             if (error && error.code === 'PGRST116') {
                 // Profile doesn't exist, create it
+                console.log('Profile not found, creating new one...');
                 const username = user.user_metadata?.username || user.email.split('@')[0];
                 const displayName = user.user_metadata?.display_name || username;
 
@@ -47,13 +56,25 @@ class WebikosApp {
                     .select()
                     .single();
 
+                console.log('Profile creation result:', { newProfile, insertError });
                 if (insertError) throw insertError;
                 profile = newProfile;
             }
 
             if (profile) {
+                console.log('Setting current profile:', profile);
                 this.currentProfile = profile;
+
+                // Update ProfileManager
+                if (window.profileManager) {
+                    window.profileManager.currentProfile = profile;
+                    console.log('ProfileManager updated with profile');
+                }
+
                 this.updateUserInterface(profile);
+                console.log('Profile loaded successfully');
+            } else {
+                console.warn('No profile data received');
             }
         } catch (error) {
             console.error('Error loading profile:', error);
