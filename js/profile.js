@@ -12,8 +12,11 @@ class ProfileManager {
         console.log('Modal already open?', this.isModalOpen);
         if (this.isModalOpen) return;
 
-        // Close any existing modal first
-        this.closeModal();
+        // Close any existing modal first (synchronously)
+        const existingBackdrop = document.getElementById('profile-modal-backdrop');
+        if (existingBackdrop) {
+            existingBackdrop.remove();
+        }
 
         this.isModalOpen = true;
         console.log('Creating modal...');
@@ -355,6 +358,11 @@ class ProfileManager {
 
     closeModal() {
         console.log('closeModal called');
+
+        // Reset state immediately to prevent race conditions
+        this.isModalOpen = false;
+        this.pendingAvatarUrl = null;
+
         const backdrop = document.getElementById('profile-modal-backdrop');
         if (backdrop) {
             backdrop.classList.remove('active');
@@ -362,14 +370,10 @@ class ProfileManager {
                 if (backdrop.parentNode) {
                     backdrop.parentNode.removeChild(backdrop);
                 }
-                this.isModalOpen = false;
-                this.pendingAvatarUrl = null;
-                console.log('Modal closed and state reset');
+                console.log('Modal DOM element removed');
             }, 300);
+            console.log('Modal closed and state reset');
         } else {
-            // Reset state even if no backdrop found
-            this.isModalOpen = false;
-            this.pendingAvatarUrl = null;
             console.log('No backdrop found, but state reset');
         }
     }
