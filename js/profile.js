@@ -333,11 +333,18 @@ class ProfileManager {
                 updateData.avatar_url = this.pendingAvatarUrl;
             }
 
-            // Update profile
+            // Use upsert to handle both insert and update
+            const upsertData = {
+                id: this.app.currentUser.id,
+                ...updateData
+            };
+
             const { data, error } = await this.supabase
                 .from('user_profiles')
-                .update(updateData)
-                .eq('id', this.app.currentUser.id)
+                .upsert(upsertData, {
+                    onConflict: 'id',
+                    ignoreDuplicates: false
+                })
                 .select()
                 .single();
 
