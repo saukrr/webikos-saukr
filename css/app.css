@@ -1,16 +1,29 @@
-/* Twitter/X Exact Interface Recreation */
+/* 🔥 BRUTÁLNĚ KRÁSNÝ X/TWITTER INTERFACE 🔥 */
 
 .dashboard {
     display: none;
     min-height: 100vh;
-    background: var(--background-primary);
+    background: var(--bg-primary);
+    transition: all var(--transition-medium);
 }
 
 .dashboard.active {
     display: block;
+    animation: fadeInUp 0.6s var(--ease-out-cubic);
 }
 
-/* Twitter/X Exact Layout Structure */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* DOKONALÉ ROZLOŽENÍ - Pixel perfect */
 .app-main {
     display: flex;
     justify-content: center;
@@ -19,9 +32,10 @@
     max-width: 1200px;
     margin: 0 auto;
     position: relative;
+    background: var(--bg-primary);
 }
 
-/* Left Sidebar - Twitter/X Navigation */
+/* LEVÝ SIDEBAR - Nádherná navigace */
 .sidebar {
     width: var(--sidebar-width);
     padding: 0 12px;
@@ -30,42 +44,64 @@
     top: 0;
     height: 100vh;
     overflow-y: auto;
-    z-index: 100;
+    z-index: 1000;
+    background: var(--bg-primary);
+    border-right: 1px solid var(--border-primary);
+    backdrop-filter: var(--backdrop-blur);
+    transition: all var(--transition-medium);
 }
 
-/* Main Content Area */
+/* HLAVNÍ OBSAH - Perfektní feed */
 .main-content {
     width: var(--main-width);
     margin-left: var(--sidebar-width);
-    border-left: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
+    border-left: 1px solid var(--border-primary);
+    border-right: 1px solid var(--border-primary);
     min-height: 100vh;
+    background: var(--bg-primary);
+    position: relative;
+    overflow: hidden;
 }
 
-/* Right Sidebar */
+/* PRAVÝ SIDEBAR - Trendy a návrhy */
 .right-sidebar {
-    width: var(--right-sidebar-width);
+    width: var(--right-width);
     padding: 0 20px;
     position: fixed;
     right: calc(50% - 600px);
     top: 0;
     height: 100vh;
     overflow-y: auto;
-    z-index: 100;
+    z-index: 1000;
+    background: var(--bg-primary);
+    transition: all var(--transition-medium);
 }
 
-/* Twitter/X Header (Top Bar) */
+/* HEADER - Glassmorphism krása */
 .main-header {
     position: sticky;
     top: 0;
-    background: var(--header-bg);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-color);
-    z-index: 1000;
+    background: var(--bg-glass);
+    backdrop-filter: var(--backdrop-blur) var(--backdrop-saturate);
+    border-bottom: 1px solid var(--border-primary);
+    z-index: 2000;
     height: var(--header-height);
     display: flex;
     align-items: center;
     padding: 0 16px;
+    transition: all var(--transition-medium);
+}
+
+.main-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    opacity: 0.8;
+    z-index: -1;
 }
 
 .main-header h1 {
@@ -73,9 +109,10 @@
     font-weight: 800;
     color: var(--text-primary);
     margin: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: all var(--transition-fast);
 }
 
-/* Theme Toggle in Header */
 .header-actions {
     margin-left: auto;
     display: flex;
@@ -83,34 +120,69 @@
     gap: 12px;
 }
 
-/* Twitter/X Left Sidebar Navigation */
+/* SIDEBAR NAVIGACE - Absolutně dokonalá */
 .sidebar-content {
     padding: 12px 0;
     height: 100vh;
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+
+.sidebar-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    opacity: 0.5;
+    z-index: -1;
 }
 
 .sidebar-logo {
     padding: 12px 16px;
     margin-bottom: 32px;
+    position: relative;
 }
 
 .logo-container {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     color: var(--text-primary);
     cursor: pointer;
-    transition: var(--transition-fast);
+    transition: all var(--transition-bounce);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.logo-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle, var(--x-blue-light) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
 }
 
 .logo-container:hover {
-    background: var(--background-hover);
-    border-radius: var(--border-radius-full);
-    padding: 8px;
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: var(--shadow-lg);
 }
 
-/* Navigation Menu */
+.logo-container:hover::before {
+    opacity: 1;
+}
+
+/* NAVIGAČNÍ MENU - Silky smooth */
 .sidebar-nav {
     flex: 1;
     margin-bottom: 32px;
@@ -121,21 +193,55 @@
     align-items: center;
     padding: 12px 16px;
     margin: 2px 0;
-    border-radius: var(--border-radius-full);
+    border-radius: var(--radius-full);
     text-decoration: none;
     color: var(--text-primary);
     font-size: 20px;
     font-weight: 400;
-    transition: var(--transition-fast);
+    transition: all var(--transition-medium);
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--bg-hover) 0%, var(--bg-hover-strong) 100%);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
 }
 
 .nav-item:hover {
-    background: var(--background-hover);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-md);
+}
+
+.nav-item:hover::before {
+    opacity: 1;
 }
 
 .nav-item.active {
     font-weight: 700;
+    background: linear-gradient(135deg, var(--x-blue-light) 0%, var(--x-blue-ultra-light) 100%);
+    color: var(--x-blue);
+    box-shadow: var(--shadow-md);
+}
+
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 20px;
+    background: var(--x-blue);
+    border-radius: var(--radius-full);
 }
 
 .nav-icon {
@@ -146,44 +252,97 @@
     align-items: center;
     justify-content: center;
     font-size: 24px;
+    transition: transform var(--transition-fast);
+    z-index: 1;
+}
+
+.nav-item:hover .nav-icon {
+    transform: scale(1.1);
 }
 
 .nav-text {
     font-size: 20px;
+    z-index: 1;
 }
 
-/* Tweet Button */
+/* TWEET TLAČÍTKO - Absolutní krása */
 .sidebar-tweet-btn {
-    background: var(--twitter-blue);
-    color: white;
+    background: linear-gradient(135deg, var(--x-blue) 0%, var(--x-blue-hover) 100%);
+    color: var(--text-inverse);
     border: none;
-    border-radius: var(--border-radius-full);
+    border-radius: var(--radius-full);
     padding: 16px 32px;
     font-size: 17px;
     font-weight: 700;
     cursor: pointer;
-    transition: var(--transition-fast);
+    transition: all var(--transition-bounce);
     margin: 16px;
     width: calc(100% - 32px);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-tweet-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left var(--transition-slow);
 }
 
 .sidebar-tweet-btn:hover {
-    background: var(--twitter-blue-hover);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--shadow-xl);
+    background: linear-gradient(135deg, var(--x-blue-hover) 0%, var(--x-blue-pressed) 100%);
 }
 
-/* User Menu */
+.sidebar-tweet-btn:hover::before {
+    left: 100%;
+}
+
+.sidebar-tweet-btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: var(--shadow-md);
+}
+
+/* USER MENU - Elegantní profil */
 .sidebar-user {
     padding: 12px 16px;
-    border-radius: var(--border-radius-full);
-    transition: var(--transition-fast);
+    border-radius: var(--radius-full);
+    transition: all var(--transition-medium);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    margin: 8px;
+}
+
+.sidebar-user::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--bg-hover) 0%, var(--bg-hover-strong) 100%);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
 }
 
 .sidebar-user:hover {
-    background: var(--background-hover);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.sidebar-user:hover::before {
+    opacity: 1;
 }
 
 .user-info {
@@ -191,26 +350,54 @@
     align-items: center;
     flex: 1;
     min-width: 0;
+    z-index: 1;
 }
 
+/* AVATARY - Nádherné s efekty */
 .user-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--twitter-blue) 0%, var(--twitter-green) 100%);
+    background: linear-gradient(135deg, var(--x-blue) 0%, var(--x-green) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--text-inverse);
     font-weight: 700;
     font-size: 18px;
     margin-right: 12px;
     flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-medium);
+    box-shadow: var(--shadow-md);
+}
+
+.user-avatar::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: rotate(45deg);
+    transition: transform var(--transition-slow);
+}
+
+.user-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-lg);
+}
+
+.user-avatar:hover::before {
+    transform: rotate(45deg) translate(50%, 50%);
 }
 
 .user-details {
     flex: 1;
     min-width: 0;
+    z-index: 1;
 }
 
 .user-name {
@@ -220,6 +407,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    transition: color var(--transition-fast);
 }
 
 .user-handle {
@@ -228,12 +416,14 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    transition: color var(--transition-fast);
 }
 
 .user-menu-dropdown {
     display: flex;
     align-items: center;
     gap: 8px;
+    z-index: 1;
 }
 
 .theme-btn, .logout-btn {
@@ -242,20 +432,51 @@
     color: var(--text-secondary);
     cursor: pointer;
     padding: 8px;
-    border-radius: var(--border-radius-small);
+    border-radius: var(--radius-sm);
     font-size: 14px;
-    transition: var(--transition-fast);
+    transition: all var(--transition-medium);
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-btn::before, .logout-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-hover);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
 }
 
 .theme-btn:hover, .logout-btn:hover {
-    background: var(--background-hover);
     color: var(--text-primary);
+    transform: scale(1.05);
 }
 
-/* Compose Section */
+.theme-btn:hover::before, .logout-btn:hover::before {
+    opacity: 1;
+}
+
+/* COMPOSE SEKCE - Absolutně dokonalá */
 .compose-section {
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-primary);
     padding: 16px;
+    background: var(--bg-primary);
+    position: relative;
+    overflow: hidden;
+}
+
+.compose-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--x-blue-light), transparent);
 }
 
 .compose-form {
@@ -276,18 +497,45 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--twitter-blue) 0%, var(--twitter-green) 100%);
+    background: linear-gradient(135deg, var(--x-blue) 0%, var(--x-green) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--text-inverse);
     font-weight: 700;
     font-size: 18px;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-medium);
+    position: relative;
+    overflow: hidden;
 }
 
+.compose-avatar .avatar-placeholder::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: rotate(45deg);
+    transition: transform var(--transition-slow);
+}
+
+.compose-avatar .avatar-placeholder:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-lg);
+}
+
+.compose-avatar .avatar-placeholder:hover::before {
+    transform: rotate(45deg) translate(50%, 50%);
+}
+
+/* COMPOSE INPUT - Magický textarea */
 .compose-input {
     flex: 1;
     min-width: 0;
+    position: relative;
 }
 
 #tweet-content {
@@ -302,20 +550,40 @@
     resize: none;
     min-height: 120px;
     padding: 12px 0;
+    transition: all var(--transition-medium);
+    position: relative;
+    z-index: 1;
 }
 
 #tweet-content::placeholder {
     color: var(--text-secondary);
     font-size: 20px;
+    transition: color var(--transition-fast);
 }
 
+#tweet-content:focus::placeholder {
+    color: var(--text-tertiary);
+}
+
+/* COMPOSE AKCE - Dokonalé tlačítka */
 .compose-actions {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-top: 12px;
     padding-top: 12px;
-    border-top: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-primary);
+    position: relative;
+}
+
+.compose-actions::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-secondary), transparent);
 }
 
 .compose-tools {
@@ -327,18 +595,42 @@
 .tool-btn {
     background: none;
     border: none;
-    color: var(--twitter-blue);
+    color: var(--x-blue);
     cursor: pointer;
     padding: 8px;
     border-radius: 50%;
-    transition: var(--transition-fast);
+    transition: all var(--transition-bounce);
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.tool-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--x-blue-light);
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform var(--transition-bounce);
 }
 
 .tool-btn:hover {
-    background: var(--twitter-blue-light);
+    transform: scale(1.1);
+    color: var(--x-blue-hover);
+}
+
+.tool-btn:hover::before {
+    transform: scale(1);
+}
+
+.tool-btn:active {
+    transform: scale(0.95);
 }
 
 .compose-submit {
@@ -350,37 +642,76 @@
 .char-count {
     color: var(--text-secondary);
     font-size: 13px;
+    font-weight: 500;
+    transition: color var(--transition-fast);
 }
 
 .char-count.warning {
-    color: #ffad1f;
+    color: var(--x-yellow);
+    font-weight: 600;
 }
 
 .char-count.danger {
-    color: var(--twitter-red);
+    color: var(--x-red);
+    font-weight: 700;
+    animation: pulse 1s infinite;
 }
 
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* TWEET TLAČÍTKO - Absolutní dokonalost */
 .tweet-btn {
-    background: var(--twitter-blue);
-    color: white;
+    background: linear-gradient(135deg, var(--x-blue) 0%, var(--x-blue-hover) 100%);
+    color: var(--text-inverse);
     border: none;
-    border-radius: var(--border-radius-full);
+    border-radius: var(--radius-full);
     padding: 8px 24px;
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
-    transition: var(--transition-fast);
+    transition: all var(--transition-bounce);
     min-width: 80px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.tweet-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left var(--transition-slow);
 }
 
 .tweet-btn:hover:not(:disabled) {
-    background: var(--twitter-blue-hover);
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, var(--x-blue-hover) 0%, var(--x-blue-pressed) 100%);
+}
+
+.tweet-btn:hover:not(:disabled)::before {
+    left: 100%;
+}
+
+.tweet-btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+    box-shadow: var(--shadow-sm);
 }
 
 .tweet-btn:disabled {
-    background: var(--text-secondary);
+    background: var(--text-tertiary);
     cursor: not-allowed;
     opacity: 0.5;
+    transform: none;
+    box-shadow: none;
 }
 
 /* Timeline */
