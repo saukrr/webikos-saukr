@@ -334,7 +334,7 @@ class WebikosApp {
                 .insert([postData])
                 .select(`
                     *,
-                    user_profiles (
+                    user_profiles!user_id (
                         username,
                         display_name,
                         avatar_url
@@ -395,7 +395,7 @@ class WebikosApp {
                 .from('posts')
                 .select(`
                     *,
-                    user_profiles (
+                    user_profiles!user_id (
                         username,
                         display_name,
                         avatar_url
