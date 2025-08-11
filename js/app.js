@@ -19,11 +19,14 @@ class WebikosApp {
         // Load user profile
         await this.loadUserProfile(user);
         
-        // Initialize app components
-        this.initializeApp();
+        // Initialize app components after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            this.initializeApp();
+        }, 100);
     }
 
     async loadUserProfile(user) {
+        console.log('Loading user profile for:', user);
         try {
             let { data: profile, error } = await this.supabase
                 .from('user_profiles')
@@ -31,11 +34,16 @@ class WebikosApp {
                 .eq('id', user.id)
                 .single();
 
+            console.log('Profile query result:', { profile, error });
+
             if (error && error.code === 'PGRST116') {
                 // Profile doesn't exist, create it
+                console.log('Profile not found, creating new profile...');
                 const username = user.user_metadata?.username || user.email.split('@')[0];
                 const displayName = user.user_metadata?.display_name || username;
-                
+
+                console.log('Creating profile with:', { username, displayName });
+
                 const { data: newProfile, error: insertError } = await this.supabase
                     .from('user_profiles')
                     .insert([{
@@ -47,13 +55,24 @@ class WebikosApp {
                     .select()
                     .single();
 
+                console.log('Profile creation result:', { newProfile, insertError });
+
                 if (insertError) throw insertError;
                 profile = newProfile;
             }
 
             if (profile) {
+                console.log('Setting current profile:', profile);
                 this.currentProfile = profile;
+
+                // Update ProfileManager with current profile
+                if (window.profileManager) {
+                    window.profileManager.currentProfile = profile;
+                }
+
                 this.updateUserInterface(profile);
+            } else {
+                console.warn('No profile data available');
             }
         } catch (error) {
             console.error('Error loading profile:', error);
@@ -63,10 +82,14 @@ class WebikosApp {
     }
 
     updateUserInterface(profile) {
+        console.log('Updating user interface with profile:', profile);
+
         // Update header
         const currentUsername = document.getElementById('current-username');
+        console.log('Current username element:', currentUsername);
         if (currentUsername) {
             currentUsername.textContent = `@${profile.username}`;
+            console.log('Updated header username to:', `@${profile.username}`);
         }
 
         // Update sidebar profile
@@ -74,10 +97,21 @@ class WebikosApp {
         const usernameDisplay = document.getElementById('user-username-display');
         const userBio = document.getElementById('user-bio');
 
-        if (displayName) displayName.textContent = profile.display_name || profile.username;
-        if (usernameDisplay) usernameDisplay.textContent = `@${profile.username}`;
-        if (userBio) userBio.textContent = profile.bio || 'Žádné bio';
-        
+        console.log('Profile elements:', { displayName, usernameDisplay, userBio });
+
+        if (displayName) {
+            displayName.textContent = profile.display_name || profile.username;
+            console.log('Updated display name to:', profile.display_name || profile.username);
+        }
+        if (usernameDisplay) {
+            usernameDisplay.textContent = `@${profile.username}`;
+            console.log('Updated username display to:', `@${profile.username}`);
+        }
+        if (userBio) {
+            userBio.textContent = profile.bio || 'Žádné bio';
+            console.log('Updated bio to:', profile.bio || 'Žádné bio');
+        }
+
         // Set avatars
         this.updateAvatars(profile);
     }
@@ -103,6 +137,7 @@ class WebikosApp {
         this.setupComposeTweet();
         this.setupMediaUpload();
         this.setupProfileEdit();
+        this.setupFollowButtons();
         this.loadPosts();
         this.setupInfiniteScroll();
     }
@@ -161,11 +196,45 @@ class WebikosApp {
     }
 
     setupProfileEdit() {
+        console.log('Setting up profile edit button...');
         const editBtn = document.querySelector('.edit-profile-btn');
+        console.log('Edit button found:', editBtn);
         if (editBtn) {
             editBtn.addEventListener('click', () => {
+                console.log('Edit button clicked!');
                 this.openProfileEditModal();
             });
+            console.log('Event listener added to edit button');
+        } else {
+            console.warn('Edit profile button not found in DOM');
+        }
+    }
+
+    setupFollowButtons() {
+        console.log('Setting up follow buttons...');
+        const followBtns = document.querySelectorAll('.follow-btn');
+        console.log('Follow buttons found:', followBtns.length);
+
+        followBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Follow button clicked');
+                this.handleFollowClick(btn);
+            });
+        });
+    }
+
+    handleFollowClick(button) {
+        const isFollowing = button.textContent.trim() === 'Sledováno';
+
+        if (isFollowing) {
+            button.textContent = 'Sledovat';
+            button.style.background = 'var(--twitter-blue)';
+            this.showNotification('Přestali jste sledovat uživatele', 'info');
+        } else {
+            button.textContent = 'Sledováno';
+            button.style.background = 'var(--twitter-green)';
+            this.showNotification('Nyní sledujete uživatele', 'success');
         }
     }
 
@@ -249,6 +318,7 @@ class WebikosApp {
     }
 
     async loadPosts(offset = 0, limit = 20) {
+        console.log('Loading posts...', { offset, limit });
         try {
             const { data: posts, error } = await this.supabase
                 .from('posts')
@@ -263,6 +333,8 @@ class WebikosApp {
                 .order('created_at', { ascending: false })
                 .range(offset, offset + limit - 1);
 
+            console.log('Posts query result:', { posts, error });
+
             if (error) throw error;
 
             if (offset === 0) {
@@ -271,6 +343,7 @@ class WebikosApp {
                 this.posts = [...this.posts, ...(posts || [])];
             }
 
+            console.log('Total posts loaded:', this.posts.length);
             this.renderPosts();
         } catch (error) {
             console.error('Error loading posts:', error);
@@ -279,16 +352,23 @@ class WebikosApp {
     }
 
     renderPosts() {
+        console.log('Rendering posts...', this.posts.length, 'posts');
         const container = document.getElementById('posts-container');
-        if (!container) return;
-        
+        console.log('Posts container found:', container);
+        if (!container) {
+            console.error('Posts container not found!');
+            return;
+        }
+
         if (this.posts.length === 0) {
+            console.log('No posts to display, showing empty message');
             container.innerHTML = '<div class="loading">Zatím žádné posty... Buďte první, kdo něco napíše! 🎉</div>';
             return;
         }
 
+        console.log('Rendering', this.posts.length, 'posts');
         container.innerHTML = this.posts.map(post => this.renderPost(post)).join('');
-        
+
         // Setup post interactions
         this.setupPostInteractions();
     }
@@ -408,8 +488,14 @@ class WebikosApp {
     }
 
     openProfileEditModal() {
+        console.log('Opening profile edit modal...');
+        console.log('ProfileManager available:', window.profileManager);
         if (window.profileManager) {
+            console.log('Calling profileManager.openEditModal()');
             window.profileManager.openEditModal();
+        } else {
+            console.error('ProfileManager not available!');
+            this.showNotification('Chyba: ProfileManager není dostupný', 'error');
         }
     }
 

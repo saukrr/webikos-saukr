@@ -8,10 +8,14 @@ class ProfileManager {
     }
 
     openEditModal() {
+        console.log('ProfileManager.openEditModal called');
+        console.log('Modal already open?', this.isModalOpen);
         if (this.isModalOpen) return;
-        
+
         this.isModalOpen = true;
+        console.log('Creating modal...');
         this.createModal();
+        console.log('Populating form...');
         this.populateForm();
     }
 
@@ -126,7 +130,11 @@ class ProfileManager {
     }
 
     populateForm() {
-        if (!this.app.currentProfile) return;
+        console.log('Populating form with profile:', this.app.currentProfile);
+        if (!this.app.currentProfile) {
+            console.warn('No current profile available for form population');
+            return;
+        }
 
         const profile = this.app.currentProfile;
         
