@@ -1,0 +1,389 @@
+/* Webikos - Twitter-like Social Platform Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --twitter-blue: #1da1f2;
+    --twitter-dark-blue: #1991db;
+    --twitter-light-blue: #e8f5fe;
+    --twitter-red: #e0245e;
+    --twitter-green: #17bf63;
+    --twitter-orange: #ff7a00;
+    --twitter-purple: #794bc4;
+    --text-primary: #14171a;
+    --text-secondary: #657786;
+    --text-muted: #aab8c2;
+    --background-primary: #ffffff;
+    --background-secondary: #f7f9fa;
+    --background-hover: #f7f9fa;
+    --border-color: #e1e8ed;
+    --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    --shadow-medium: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    --border-radius: 16px;
+    --border-radius-small: 8px;
+    --transition: all 0.2s ease-in-out;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--background-secondary);
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+/* Auth Section Styles */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--twitter-blue) 0%, var(--twitter-purple) 100%);
+}
+
+.container {
+    background: var(--background-primary);
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
+    width: 100%;
+    max-width: 420px;
+    backdrop-filter: blur(10px);
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.logo h1 {
+    color: var(--twitter-blue);
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.logo p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
+    overflow: hidden;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-bottom: 3px solid transparent;
+    transition: var(--transition);
+}
+
+.tab-button.active {
+    color: var(--twitter-blue);
+    border-bottom-color: var(--twitter-blue);
+    background: var(--twitter-light-blue);
+}
+
+.tab-button:hover:not(.active) {
+    background: var(--background-hover);
+    color: var(--text-primary);
+}
+
+.auth-form {
+    display: none;
+}
+
+.auth-form.active {
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-small);
+    font-size: 1rem;
+    transition: var(--transition);
+    background: var(--background-primary);
+    color: var(--text-primary);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--twitter-blue);
+    box-shadow: 0 0 0 3px rgba(29, 161, 242, 0.1);
+}
+
+.form-group input::placeholder {
+    color: var(--text-muted);
+}
+
+.btn {
+    width: 100%;
+    padding: 1rem;
+    background: var(--twitter-blue);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-small);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-bottom: 1rem;
+    text-transform: none;
+    letter-spacing: 0.02em;
+}
+
+.btn:hover:not(:disabled) {
+    background: var(--twitter-dark-blue);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-medium);
+}
+
+.btn:disabled {
+    background: var(--text-muted);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.social-login {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.social-btn {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-small);
+    background: var(--background-primary);
+    cursor: pointer;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: var(--transition);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.social-btn:hover {
+    background: var(--background-hover);
+    border-color: var(--twitter-blue);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-light);
+}
+
+.error, .success {
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    border-radius: var(--border-radius-small);
+    display: none;
+    font-weight: 500;
+}
+
+.error {
+    color: var(--twitter-red);
+    background: rgba(224, 36, 94, 0.1);
+    border: 1px solid rgba(224, 36, 94, 0.2);
+}
+
+.success {
+    color: var(--twitter-green);
+    background: rgba(23, 191, 99, 0.1);
+    border: 1px solid rgba(23, 191, 99, 0.2);
+}
+
+/* Remember Me Checkbox */
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.remember-me input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.remember-me label {
+    margin: 0;
+    font-weight: 400;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+/* Loading States */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Enhanced Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes bounce {
+    0%, 20%, 53%, 80%, 100% { transform: translateY(0); }
+    40%, 43% { transform: translateY(-10px); }
+    70% { transform: translateY(-5px); }
+    90% { transform: translateY(-2px); }
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced button hover effects */
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(29, 161, 242, 0.3);
+}
+
+.btn:active:not(:disabled) {
+    transform: translateY(0);
+    transition-duration: 0.1s;
+}
+
+/* Form focus effects */
+.form-group input:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px rgba(29, 161, 242, 0.1), 0 4px 12px rgba(29, 161, 242, 0.15);
+}
+
+/* Tab button animations */
+.tab-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.tab-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(29, 161, 242, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.tab-button:hover::before {
+    left: 100%;
+}
+
+/* Social button hover effects */
+.social-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Error and success message animations */
+.error, .success {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Container entrance animation */
+.container {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Loading state for buttons */
+.btn.loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .container {
+        margin: 1rem;
+        padding: 2rem;
+    }
+    
+    .logo h1 {
+        font-size: 2rem;
+    }
+    
+    .form-group input,
+    .btn,
+    .social-btn {
+        padding: 0.875rem;
+    }
+}
+
+/* Hide auth section when app is active */
+.dashboard.active ~ #auth-section {
+    display: none;
+}

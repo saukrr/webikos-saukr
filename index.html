@@ -3,9 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Webikos - Přihlášení</title>
+    <title>Webikos - Twitter-like Social Platform</title>
+    <meta name="description" content="Moderní sociální platforma inspirovaná Twitterem">
+    <meta name="keywords" content="social media, twitter, webikos, posts, social network">
+
+    <!-- External Dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/modal.css">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐦</text></svg>">
+</head>
+<body class="auth-page">
+    <div class="auth-container" id="auth-container">
+        <div class="container">
         * {
             margin: 0;
             padding: 0;
@@ -481,11 +496,15 @@
             <form id="login-form" class="auth-form active">
                 <div class="form-group">
                     <label for="login-email">Email</label>
-                    <input type="email" id="login-email" required>
+                    <input type="email" id="login-email" required placeholder="vas@email.com">
                 </div>
                 <div class="form-group">
                     <label for="login-password">Heslo</label>
-                    <input type="password" id="login-password" required>
+                    <input type="password" id="login-password" required placeholder="Vaše heslo">
+                </div>
+                <div class="remember-me">
+                    <input type="checkbox" id="remember-me">
+                    <label for="remember-me">Zůstat přihlášen</label>
                 </div>
                 <button type="submit" class="btn">Přihlásit se</button>
                 <div id="login-error" class="error"></div>
@@ -564,6 +583,7 @@
                             <h3 id="user-display-name">Display Name</h3>
                             <p id="user-username-display">@username</p>
                             <p class="user-bio" id="user-bio">Bio zde...</p>
+                            <button class="btn edit-profile-btn">Upravit profil</button>
                         </div>
                     </div>
                 </div>
@@ -578,8 +598,13 @@
                         <form id="compose-form">
                             <textarea id="tweet-content" placeholder="Co se děje?" maxlength="280" rows="3"></textarea>
                             <div class="compose-footer">
-                                <span class="char-count">280</span>
-                                <button type="submit" class="btn tweet-btn">Tweetovat</button>
+                                <div class="compose-actions">
+                                    <button type="button" class="media-upload-btn" title="Přidat obrázek">📷</button>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <span class="char-count">280</span>
+                                    <button type="submit" class="btn tweet-btn">Tweetovat</button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -594,428 +619,65 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Right Sidebar -->
+                <div class="right-sidebar">
+                    <div class="trends-card">
+                        <h3>Trendy pro vás</h3>
+                        <div class="trend-item">
+                            <p class="trend-category">Trendy v České republice</p>
+                            <p class="trend-hashtag">#Webikos</p>
+                            <p class="trend-posts">1,234 tweetů</p>
+                        </div>
+                        <div class="trend-item">
+                            <p class="trend-category">Technologie</p>
+                            <p class="trend-hashtag">#JavaScript</p>
+                            <p class="trend-posts">5,678 tweetů</p>
+                        </div>
+                        <div class="trend-item">
+                            <p class="trend-category">Sociální sítě</p>
+                            <p class="trend-hashtag">#SocialMedia</p>
+                            <p class="trend-posts">2,345 tweetů</p>
+                        </div>
+                    </div>
+
+                    <div class="suggestions-card">
+                        <h3>Koho sledovat</h3>
+                        <div class="suggestion-item">
+                            <div class="suggestion-avatar">W</div>
+                            <div class="suggestion-info">
+                                <h4>Webikos Official</h4>
+                                <p>@webikos</p>
+                            </div>
+                            <button class="btn follow-btn">Sledovat</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/profile.js"></script>
     <script>
         // Supabase configuration
-        const SUPABASE_URL = 'https://gjfzmbeylksefphagupw.supabase.co'
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdqZnptYmV5bGtzZWZwaGFndXB3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ4ODcxNjcsImV4cCI6MjA3MDQ2MzE2N30.9EId0vaUw7MVct0syNfr9bq8BpyACl4pXcnEMmRhSuc'
-        
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+        const SUPABASE_URL = 'https://gjfzmbeylksefphagupw.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdqZnptYmV5bGtzZWZwaGFndXB3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ4ODcxNjcsImV4cCI6MjA3MDQ2MzE2N30.9EId0vaUw7MVct0syNfr9bq8BpyACl4pXcnEMmRhSuc';
 
-        // Check if user is already logged in
-        checkUser()
+        // Initialize Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        async function checkUser() {
-            const { data: { user } } = await supabase.auth.getUser()
-            if (user) {
-                showDashboard(user)
-            }
-        }
+        // Initialize application modules
+        window.auth = new AuthManager(supabase);
+        window.app = new WebikosApp(supabase);
+        window.profileManager = new ProfileManager(supabase, window.app);
 
-        // Tab switching
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'))
-            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'))
-            
-            event.target.classList.add('active')
-            document.getElementById(tab + '-form').classList.add('active')
-        }
-
-        // Login form handler
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault()
-            
-            const email = document.getElementById('login-email').value
-            const password = document.getElementById('login-password').value
-            
-            clearMessages()
-            
-            try {
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                })
-                
-                if (error) throw error
-                
-                showMessage('login-success', 'Úspěšně přihlášen!')
-                setTimeout(() => showDashboard(data.user), 1000)
-                
-            } catch (error) {
-                showMessage('login-error', error.message)
-            }
-        })
-
-        // Register form handler
-        document.getElementById('register-form').addEventListener('submit', async (e) => {
-            e.preventDefault()
-
-            const username = document.getElementById('register-username').value.replace('@', '')
-            const displayName = document.getElementById('register-display-name').value
-            const email = document.getElementById('register-email').value
-            const password = document.getElementById('register-password').value
-            const confirmPassword = document.getElementById('register-confirm').value
-
-            clearMessages()
-
-            if (password !== confirmPassword) {
-                showMessage('register-error', 'Hesla se neshodují!')
-                return
-            }
-
-            try {
-                // Check if username is available
-                const { data: existingUser } = await supabase
-                    .from('user_profiles')
-                    .select('username')
-                    .eq('username', username)
-                    .single()
-
-                if (existingUser) {
-                    showMessage('register-error', 'Uživatelské jméno již existuje!')
-                    return
-                }
-
-                const { data, error } = await supabase.auth.signUp({
-                    email: email,
-                    password: password,
-                    options: {
-                        data: {
-                            username: username,
-                            display_name: displayName || username
-                        }
-                    }
-                })
-
-                if (error) throw error
-
-                showMessage('register-success', 'Registrace úspěšná! Zkontrolujte email pro potvrzení.')
-
-            } catch (error) {
-                showMessage('register-error', error.message)
-            }
-        })
-
-        // Social login functions
-        async function signInWithGoogle() {
-            try {
-                const { data, error } = await supabase.auth.signInWithOAuth({
-                    provider: 'google',
-                    options: {
-                        redirectTo: window.location.origin
-                    }
-                })
-                if (error) throw error
-            } catch (error) {
-                console.error('Google login error:', error)
-            }
-        }
-
-        async function signInWithGitHub() {
-            try {
-                const { data, error } = await supabase.auth.signInWithOAuth({
-                    provider: 'github',
-                    options: {
-                        redirectTo: window.location.origin
-                    }
-                })
-                if (error) throw error
-            } catch (error) {
-                console.error('GitHub login error:', error)
-            }
-        }
-
-        // Sign out function
-        async function signOut() {
-            try {
-                const { error } = await supabase.auth.signOut()
-                if (error) throw error
-                
-                showAuthSection()
-            } catch (error) {
-                console.error('Sign out error:', error)
-            }
-        }
-
-        // UI helper functions
-        function showMessage(elementId, message) {
-            const element = document.getElementById(elementId)
-            element.textContent = message
-            element.style.display = 'block'
-        }
-
-        function clearMessages() {
-            document.querySelectorAll('.error, .success').forEach(el => {
-                el.style.display = 'none'
-                el.textContent = ''
-            })
-        }
-
-        async function showDashboard(user) {
-            document.getElementById('auth-section').style.display = 'none'
-            document.getElementById('app-section').classList.add('active')
-
-            // Load or create user profile
-            await loadUserProfile(user)
-
-            // Initialize app
-            initializeApp()
-        }
-
-        function showAuthSection() {
-            document.getElementById('app-section').classList.remove('active')
-            document.getElementById('auth-section').style.display = 'block'
-
-            // Clear forms
-            document.querySelectorAll('input').forEach(input => input.value = '')
-            clearMessages()
-        }
-
-        // Listen for auth changes
-        supabase.auth.onAuthStateChange(async (event, session) => {
-            if (event === 'SIGNED_IN') {
-                await showDashboard(session.user)
-            } else if (event === 'SIGNED_OUT') {
-                showAuthSection()
-            }
-        })
-
-        // Load user profile
-        async function loadUserProfile(user) {
-            try {
-                let { data: profile, error } = await supabase
-                    .from('user_profiles')
-                    .select('*')
-                    .eq('id', user.id)
-                    .single()
-
-                if (error && error.code === 'PGRST116') {
-                    // Profile doesn't exist, create it
-                    const username = user.user_metadata?.username || user.email.split('@')[0]
-                    const displayName = user.user_metadata?.display_name || username
-
-                    const { data: newProfile, error: insertError } = await supabase
-                        .from('user_profiles')
-                        .insert([{
-                            id: user.id,
-                            username: username,
-                            display_name: displayName,
-                            bio: 'Nový uživatel na Webikos!'
-                        }])
-                        .select()
-                        .single()
-
-                    if (insertError) throw insertError
-                    profile = newProfile
-                }
-
-                if (profile) {
-                    updateUserInterface(profile)
-                }
-            } catch (error) {
-                console.error('Error loading profile:', error)
-            }
-        }
-
-        // Update user interface with profile data
-        function updateUserInterface(profile) {
-            document.getElementById('current-username').textContent = `@${profile.username}`
-            document.getElementById('user-display-name').textContent = profile.display_name || profile.username
-            document.getElementById('user-username-display').textContent = `@${profile.username}`
-            document.getElementById('user-bio').textContent = profile.bio || 'Žádné bio'
-
-            // Set avatar
-            const avatarElements = document.querySelectorAll('.avatar-placeholder, .post-avatar')
-            avatarElements.forEach(el => {
-                el.textContent = (profile.display_name || profile.username).charAt(0).toUpperCase()
-            })
-        }
-
-        // Initialize app
-        function initializeApp() {
-            setupComposeTweet()
-            loadPosts()
-        }
-
-        // Setup compose tweet functionality
-        function setupComposeTweet() {
-            const tweetContent = document.getElementById('tweet-content')
-            const charCount = document.querySelector('.char-count')
-            const tweetBtn = document.querySelector('.tweet-btn')
-            const composeForm = document.getElementById('compose-form')
-
-            // Character counter
-            tweetContent.addEventListener('input', () => {
-                const remaining = 280 - tweetContent.value.length
-                charCount.textContent = remaining
-
-                if (remaining < 20) {
-                    charCount.classList.add('warning')
-                } else {
-                    charCount.classList.remove('warning')
-                }
-
-                tweetBtn.disabled = remaining < 0 || tweetContent.value.trim().length === 0
-            })
-
-            // Submit tweet
-            composeForm.addEventListener('submit', async (e) => {
-                e.preventDefault()
-                await postTweet(tweetContent.value.trim())
-                tweetContent.value = ''
-                charCount.textContent = '280'
-                charCount.classList.remove('warning')
-                tweetBtn.disabled = true
-            })
-        }
-
-        // Post a new tweet
-        async function postTweet(content) {
-            if (!content) return
-
-            try {
-                const { data: { user } } = await supabase.auth.getUser()
-                if (!user) return
-
-                const { data, error } = await supabase
-                    .from('posts')
-                    .insert([{
-                        user_id: user.id,
-                        content: content
-                    }])
-                    .select()
-
-                if (error) throw error
-
-                // Reload posts to show the new one
-                loadPosts()
-            } catch (error) {
-                console.error('Error posting tweet:', error)
-            }
-        }
-
-        // Load posts for timeline
-        async function loadPosts() {
-            try {
-                const { data: posts, error } = await supabase
-                    .from('posts')
-                    .select(`
-                        *,
-                        user_profiles (
-                            username,
-                            display_name,
-                            avatar_url
-                        )
-                    `)
-                    .order('created_at', { ascending: false })
-                    .limit(20)
-
-                if (error) throw error
-
-                displayPosts(posts)
-            } catch (error) {
-                console.error('Error loading posts:', error)
-            }
-        }
-
-        // Display posts in timeline
-        function displayPosts(posts) {
-            const container = document.getElementById('posts-container')
-
-            if (posts.length === 0) {
-                container.innerHTML = '<div class="loading">Zatím žádné posty...</div>'
-                return
-            }
-
-            container.innerHTML = posts.map(post => `
-                <div class="post" data-post-id="${post.id}">
-                    <div class="post-header">
-                        <div class="post-avatar">
-                            ${(post.user_profiles?.display_name || post.user_profiles?.username || 'U').charAt(0).toUpperCase()}
-                        </div>
-                        <div class="post-user-info">
-                            <h4>${post.user_profiles?.display_name || post.user_profiles?.username || 'Uživatel'}</h4>
-                            <p class="post-username">@${post.user_profiles?.username || 'unknown'}</p>
-                        </div>
-                        <span class="post-time">${formatTime(post.created_at)}</span>
-                    </div>
-                    <div class="post-content">${escapeHtml(post.content)}</div>
-                    <div class="post-actions">
-                        <div class="post-action like-action" onclick="toggleLike('${post.id}')">
-                            <span>❤️</span>
-                            <span class="like-count">${post.likes_count || 0}</span>
-                        </div>
-                        <div class="post-action">
-                            <span>🔄</span>
-                            <span>${post.retweets_count || 0}</span>
-                        </div>
-                        <div class="post-action">
-                            <span>💬</span>
-                            <span>${post.replies_count || 0}</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('')
-        }
-
-        // Toggle like on post
-        async function toggleLike(postId) {
-            try {
-                const { data: { user } } = await supabase.auth.getUser()
-                if (!user) return
-
-                // Check if already liked
-                const { data: existingLike } = await supabase
-                    .from('post_likes')
-                    .select('id')
-                    .eq('user_id', user.id)
-                    .eq('post_id', postId)
-                    .single()
-
-                if (existingLike) {
-                    // Unlike
-                    await supabase
-                        .from('post_likes')
-                        .delete()
-                        .eq('user_id', user.id)
-                        .eq('post_id', postId)
-                } else {
-                    // Like
-                    await supabase
-                        .from('post_likes')
-                        .insert([{
-                            user_id: user.id,
-                            post_id: postId
-                        }])
-                }
-
-                // Reload posts to update counts
-                loadPosts()
-            } catch (error) {
-                console.error('Error toggling like:', error)
-            }
-        }
-
-        // Helper functions
-        function formatTime(timestamp) {
-            const date = new Date(timestamp)
-            const now = new Date()
-            const diff = now - date
-
-            if (diff < 60000) return 'právě teď'
-            if (diff < 3600000) return `${Math.floor(diff / 60000)}m`
-            if (diff < 86400000) return `${Math.floor(diff / 3600000)}h`
-            return date.toLocaleDateString('cs-CZ')
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div')
-            div.textContent = text
-            return div.innerHTML
-        }
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Webikos app initialized');
+        });
     </script>
 </body>
 </html>
