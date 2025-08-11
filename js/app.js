@@ -9,7 +9,6 @@ class WebikosApp {
     }
 
     async showDashboard(user) {
-        console.log('Showing dashboard for user:', user);
         this.currentUser = user;
 
         // Hide auth section and show app
@@ -17,119 +16,57 @@ class WebikosApp {
         document.getElementById('app-section').classList.add('active');
         document.body.className = 'app-page';
 
-        // Show loading indicator
-        this.showNotification('Načítání profilu...', 'info');
-
         // Load user profile
         await this.loadUserProfile(user);
 
-        // Initialize app components after a short delay to ensure DOM is ready
-        setTimeout(() => {
-            this.initializeApp();
-        }, 100);
+        // Initialize app
+        this.initializeApp();
     }
 
     async loadUserProfile(user) {
-        console.log('🔄 Loading user profile for:', user);
-        console.log('User ID:', user.id);
-        console.log('User email:', user.email);
-
         try {
-            // First, let's try to get the profile
-            console.log('📡 Querying user_profiles table...');
             let { data: profile, error } = await this.supabase
                 .from('user_profiles')
                 .select('*')
                 .eq('id', user.id)
                 .single();
 
-            console.log('📊 Profile query result:', { profile, error });
+            if (error && error.code === 'PGRST116') {
+                // Profile doesn't exist, create it
+                const username = user.user_metadata?.username || user.email.split('@')[0];
+                const displayName = user.user_metadata?.display_name || username;
 
-            if (error) {
-                console.log('❌ Profile query error:', error);
-                if (error.code === 'PGRST116') {
-                    // Profile doesn't exist, create it
-                    console.log('🆕 Profile not found, creating new profile...');
-                    const username = user.user_metadata?.username || user.email.split('@')[0];
-                    const displayName = user.user_metadata?.display_name || username;
+                const { data: newProfile, error: insertError } = await this.supabase
+                    .from('user_profiles')
+                    .insert([{
+                        id: user.id,
+                        username: username,
+                        display_name: displayName,
+                        bio: 'Nový uživatel na Webikos! 🎉'
+                    }])
+                    .select()
+                    .single();
 
-                    console.log('📝 Creating profile with:', { username, displayName, userId: user.id });
-
-                    const { data: newProfile, error: insertError } = await this.supabase
-                        .from('user_profiles')
-                        .insert([{
-                            id: user.id,
-                            username: username,
-                            display_name: displayName,
-                            bio: 'Nový uživatel na Webikos! 🎉'
-                        }])
-                        .select()
-                        .single();
-
-                    console.log('✅ Profile creation result:', { newProfile, insertError });
-
-                    if (insertError) {
-                        console.error('❌ Failed to create profile:', insertError);
-                        throw insertError;
-                    }
-                    profile = newProfile;
-                } else {
-                    console.error('❌ Unexpected database error:', error);
-                    throw error;
-                }
+                if (insertError) throw insertError;
+                profile = newProfile;
             }
 
             if (profile) {
-                console.log('✅ Profile loaded successfully:', profile);
                 this.currentProfile = profile;
-
-                // Update ProfileManager with current profile
-                if (window.profileManager) {
-                    window.profileManager.currentProfile = profile;
-                    console.log('🔗 ProfileManager updated with current profile');
-                }
-
-                console.log('🎨 Updating user interface...');
                 this.updateUserInterface(profile);
-                this.showNotification('Profil načten!', 'success');
-            } else {
-                console.warn('⚠️ No profile data available, creating fallback profile');
-                // Create a fallback profile for testing
-                const fallbackProfile = {
-                    id: user.id,
-                    username: user.email.split('@')[0],
-                    display_name: user.email.split('@')[0],
-                    bio: 'Nový uživatel na Webikos! 🎉'
-                };
-                this.currentProfile = fallbackProfile;
-                this.updateUserInterface(fallbackProfile);
-                this.showNotification('Použit záložní profil', 'warning');
             }
         } catch (error) {
-            console.error('💥 Critical error loading profile:', error);
-            this.showNotification('Kritická chyba při načítání profilu: ' + error.message, 'error');
-
-            // Force create a fallback profile
-            const emergencyProfile = {
-                id: user.id,
-                username: user.email.split('@')[0],
-                display_name: user.email.split('@')[0],
-                bio: 'Nouzový profil - kontaktujte podporu'
-            };
-            this.currentProfile = emergencyProfile;
-            this.updateUserInterface(emergencyProfile);
+            console.error('Error loading profile:', error);
+            // Show error message to user
+            this.showNotification('Chyba při načítání profilu', 'error');
         }
     }
 
     updateUserInterface(profile) {
-        console.log('Updating user interface with profile:', profile);
-
         // Update header
         const currentUsername = document.getElementById('current-username');
-        console.log('Current username element:', currentUsername);
         if (currentUsername) {
             currentUsername.textContent = `@${profile.username}`;
-            console.log('Updated header username to:', `@${profile.username}`);
         }
 
         // Update sidebar profile
@@ -137,20 +74,9 @@ class WebikosApp {
         const usernameDisplay = document.getElementById('user-username-display');
         const userBio = document.getElementById('user-bio');
 
-        console.log('Profile elements:', { displayName, usernameDisplay, userBio });
-
-        if (displayName) {
-            displayName.textContent = profile.display_name || profile.username;
-            console.log('Updated display name to:', profile.display_name || profile.username);
-        }
-        if (usernameDisplay) {
-            usernameDisplay.textContent = `@${profile.username}`;
-            console.log('Updated username display to:', `@${profile.username}`);
-        }
-        if (userBio) {
-            userBio.textContent = profile.bio || 'Žádné bio';
-            console.log('Updated bio to:', profile.bio || 'Žádné bio');
-        }
+        if (displayName) displayName.textContent = profile.display_name || profile.username;
+        if (usernameDisplay) usernameDisplay.textContent = `@${profile.username}`;
+        if (userBio) userBio.textContent = profile.bio || 'Žádné bio';
 
         // Set avatars
         this.updateAvatars(profile);
@@ -174,15 +100,12 @@ class WebikosApp {
     }
 
     initializeApp() {
-        console.log('Initializing app components...');
         this.setupComposeTweet();
         this.setupMediaUpload();
         this.setupProfileEdit();
         this.setupFollowButtons();
-        this.setupRefreshButton();
         this.loadPosts();
         this.setupInfiniteScroll();
-        console.log('App initialization complete');
     }
 
     setupRefreshButton() {
@@ -273,17 +196,11 @@ class WebikosApp {
     }
 
     setupProfileEdit() {
-        console.log('Setting up profile edit button...');
         const editBtn = document.querySelector('.edit-profile-btn');
-        console.log('Edit button found:', editBtn);
         if (editBtn) {
             editBtn.addEventListener('click', () => {
-                console.log('Edit button clicked!');
                 this.openProfileEditModal();
             });
-            console.log('Event listener added to edit button');
-        } else {
-            console.warn('Edit profile button not found in DOM');
         }
     }
 
@@ -565,14 +482,8 @@ class WebikosApp {
     }
 
     openProfileEditModal() {
-        console.log('Opening profile edit modal...');
-        console.log('ProfileManager available:', window.profileManager);
         if (window.profileManager) {
-            console.log('Calling profileManager.openEditModal()');
             window.profileManager.openEditModal();
-        } else {
-            console.error('ProfileManager not available!');
-            this.showNotification('Chyba: ProfileManager není dostupný', 'error');
         }
     }
 
