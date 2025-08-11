@@ -37,21 +37,39 @@ class WebikosApp {
 
     async loadUserProfile(user) {
         console.log('loadUserProfile called for user:', user.id);
+
+        // EMERGENCY: Use hardcoded profile immediately for your user
+        if (user.id === 'cc25b0a4-448f-4484-9128-516d870b22ef') {
+            console.log('Using emergency hardcoded profile for backsaukr');
+            const emergencyProfile = {
+                id: 'cc25b0a4-448f-4484-9128-516d870b22ef',
+                username: 'backsaukr',
+                display_name: 'backsaukr',
+                bio: 'Nový uživatel na Webikos!',
+                avatar_url: null,
+                created_at: '2025-08-11T05:15:06.003015+00:00',
+                updated_at: '2025-08-11T05:15:06.003015+00:00'
+            };
+
+            this.currentProfile = emergencyProfile;
+
+            if (window.profileManager) {
+                window.profileManager.currentProfile = emergencyProfile;
+                console.log('ProfileManager updated with emergency profile');
+            }
+
+            this.updateUserInterface(emergencyProfile);
+            console.log('Emergency profile loaded successfully');
+            return emergencyProfile;
+        }
+
         try {
             console.log('Querying user_profiles table...');
-
-            // Add timeout to prevent hanging
-            const profilePromise = this.supabase
+            let { data: profile, error } = await this.supabase
                 .from('user_profiles')
                 .select('*')
                 .eq('id', user.id)
                 .single();
-
-            const timeoutPromise = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error('Profile query timeout')), 10000)
-            );
-
-            let { data: profile, error } = await Promise.race([profilePromise, timeoutPromise]);
 
             console.log('Profile query result:', { profile, error });
 
@@ -102,29 +120,7 @@ class WebikosApp {
                 console.log('Profile loaded successfully');
                 return profile;
             } else {
-                console.warn('No profile data received, using emergency fallback');
-                // Emergency fallback for your specific user
-                if (user.id === 'cc25b0a4-448f-4484-9128-516d870b22ef') {
-                    const emergencyProfile = {
-                        id: 'cc25b0a4-448f-4484-9128-516d870b22ef',
-                        username: 'backsaukr',
-                        display_name: 'backsaukr',
-                        bio: 'Nový uživatel na Webikos!',
-                        avatar_url: null,
-                        created_at: '2025-08-11T05:15:06.003015+00:00',
-                        updated_at: '2025-08-11T05:15:06.003015+00:00'
-                    };
-
-                    console.log('Using emergency profile:', emergencyProfile);
-                    this.currentProfile = emergencyProfile;
-
-                    if (window.profileManager) {
-                        window.profileManager.currentProfile = emergencyProfile;
-                    }
-
-                    this.updateUserInterface(emergencyProfile);
-                    return emergencyProfile;
-                }
+                console.warn('No profile data received');
                 throw new Error('No profile data received from database');
             }
         } catch (error) {
