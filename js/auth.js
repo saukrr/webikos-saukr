@@ -256,11 +256,20 @@ class AuthManager {
     }
 
     async signOut() {
+        console.log('🚪 Signing out user...');
         try {
             const { error } = await this.supabase.auth.signOut();
-            if (error) throw error;
+            if (error) {
+                console.error('❌ Sign out error:', error);
+                throw error;
+            }
+            console.log('✅ User signed out successfully');
+            this.clearStoredSession();
         } catch (error) {
-            console.error('Sign out error:', error);
+            console.error('💥 Critical sign out error:', error);
+            // Force logout even if there's an error
+            this.clearStoredSession();
+            this.showAuthSection();
         }
     }
 

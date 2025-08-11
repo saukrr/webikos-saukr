@@ -41,7 +41,7 @@
                 </div>
                 <div class="form-group">
                     <label for="login-password">Heslo</label>
-                    <input type="password" id="login-password" required placeholder="Vaše heslo">
+                    <input type="password" id="login-password" required placeholder="Vaše heslo" autocomplete="current-password">
                 </div>
                 <div class="remember-me">
                     <input type="checkbox" id="remember-me">
@@ -68,11 +68,11 @@
                 </div>
                 <div class="form-group">
                     <label for="register-password">Heslo</label>
-                    <input type="password" id="register-password" required minlength="6">
+                    <input type="password" id="register-password" required minlength="6" autocomplete="new-password">
                 </div>
                 <div class="form-group">
                     <label for="register-confirm">Potvrdit heslo</label>
-                    <input type="password" id="register-confirm" required minlength="6">
+                    <input type="password" id="register-confirm" required minlength="6" autocomplete="new-password">
                 </div>
                 <button type="submit" class="btn">Registrovat se</button>
                 <div id="register-error" class="error"></div>
@@ -107,7 +107,7 @@
                     <h1>Webikos</h1>
                     <div class="user-menu">
                         <span id="current-username">@username</span>
-                        <button class="btn logout-btn" onclick="signOut()">Odhlásit se</button>
+                        <button class="btn logout-btn" onclick="window.auth.signOut()">Odhlásit se</button>
                     </div>
                 </div>
             </div>
@@ -124,7 +124,7 @@
                             <h3 id="user-display-name">Display Name</h3>
                             <p id="user-username-display">@username</p>
                             <p class="user-bio" id="user-bio">Bio zde...</p>
-                            <button class="btn edit-profile-btn">Upravit profil</button>
+                            <button class="btn edit-profile-btn" onclick="window.app.openProfileEditModal()">Upravit profil</button>
                         </div>
                     </div>
                 </div>

@@ -30,53 +30,70 @@ class WebikosApp {
     }
 
     async loadUserProfile(user) {
-        console.log('Loading user profile for:', user);
+        console.log('🔄 Loading user profile for:', user);
+        console.log('User ID:', user.id);
+        console.log('User email:', user.email);
+
         try {
+            // First, let's try to get the profile
+            console.log('📡 Querying user_profiles table...');
             let { data: profile, error } = await this.supabase
                 .from('user_profiles')
                 .select('*')
                 .eq('id', user.id)
                 .single();
 
-            console.log('Profile query result:', { profile, error });
+            console.log('📊 Profile query result:', { profile, error });
 
-            if (error && error.code === 'PGRST116') {
-                // Profile doesn't exist, create it
-                console.log('Profile not found, creating new profile...');
-                const username = user.user_metadata?.username || user.email.split('@')[0];
-                const displayName = user.user_metadata?.display_name || username;
+            if (error) {
+                console.log('❌ Profile query error:', error);
+                if (error.code === 'PGRST116') {
+                    // Profile doesn't exist, create it
+                    console.log('🆕 Profile not found, creating new profile...');
+                    const username = user.user_metadata?.username || user.email.split('@')[0];
+                    const displayName = user.user_metadata?.display_name || username;
 
-                console.log('Creating profile with:', { username, displayName });
+                    console.log('📝 Creating profile with:', { username, displayName, userId: user.id });
 
-                const { data: newProfile, error: insertError } = await this.supabase
-                    .from('user_profiles')
-                    .insert([{
-                        id: user.id,
-                        username: username,
-                        display_name: displayName,
-                        bio: 'Nový uživatel na Webikos! 🎉'
-                    }])
-                    .select()
-                    .single();
+                    const { data: newProfile, error: insertError } = await this.supabase
+                        .from('user_profiles')
+                        .insert([{
+                            id: user.id,
+                            username: username,
+                            display_name: displayName,
+                            bio: 'Nový uživatel na Webikos! 🎉'
+                        }])
+                        .select()
+                        .single();
 
-                console.log('Profile creation result:', { newProfile, insertError });
+                    console.log('✅ Profile creation result:', { newProfile, insertError });
 
-                if (insertError) throw insertError;
-                profile = newProfile;
+                    if (insertError) {
+                        console.error('❌ Failed to create profile:', insertError);
+                        throw insertError;
+                    }
+                    profile = newProfile;
+                } else {
+                    console.error('❌ Unexpected database error:', error);
+                    throw error;
+                }
             }
 
             if (profile) {
-                console.log('Setting current profile:', profile);
+                console.log('✅ Profile loaded successfully:', profile);
                 this.currentProfile = profile;
 
                 // Update ProfileManager with current profile
                 if (window.profileManager) {
                     window.profileManager.currentProfile = profile;
+                    console.log('🔗 ProfileManager updated with current profile');
                 }
 
+                console.log('🎨 Updating user interface...');
                 this.updateUserInterface(profile);
+                this.showNotification('Profil načten!', 'success');
             } else {
-                console.warn('No profile data available, creating fallback profile');
+                console.warn('⚠️ No profile data available, creating fallback profile');
                 // Create a fallback profile for testing
                 const fallbackProfile = {
                     id: user.id,
@@ -86,11 +103,21 @@ class WebikosApp {
                 };
                 this.currentProfile = fallbackProfile;
                 this.updateUserInterface(fallbackProfile);
+                this.showNotification('Použit záložní profil', 'warning');
             }
         } catch (error) {
-            console.error('Error loading profile:', error);
-            // Show error message to user
-            this.showNotification('Chyba při načítání profilu', 'error');
+            console.error('💥 Critical error loading profile:', error);
+            this.showNotification('Kritická chyba při načítání profilu: ' + error.message, 'error');
+
+            // Force create a fallback profile
+            const emergencyProfile = {
+                id: user.id,
+                username: user.email.split('@')[0],
+                display_name: user.email.split('@')[0],
+                bio: 'Nouzový profil - kontaktujte podporu'
+            };
+            this.currentProfile = emergencyProfile;
+            this.updateUserInterface(emergencyProfile);
         }
     }
 
