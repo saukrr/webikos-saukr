@@ -12,6 +12,9 @@ class ProfileManager {
         console.log('Modal already open?', this.isModalOpen);
         if (this.isModalOpen) return;
 
+        // Close any existing modal first
+        this.closeModal();
+
         this.isModalOpen = true;
         console.log('Creating modal...');
         this.createModal();
@@ -90,16 +93,21 @@ class ProfileManager {
     }
 
     setupModalEventListeners() {
-        // Form submission
-        document.getElementById('profile-edit-form').addEventListener('submit', (e) => {
+        // Form submission - remove existing listeners first
+        const form = document.getElementById('profile-edit-form');
+        const newForm = form.cloneNode(true);
+        form.parentNode.replaceChild(newForm, form);
+
+        newForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            console.log('Form submitted, calling saveProfile...');
             this.saveProfile();
         });
 
         // Bio character counter
         const bioTextarea = document.getElementById('edit-bio');
         const charCount = document.getElementById('bio-char-count');
-        
+
         bioTextarea.addEventListener('input', () => {
             const remaining = 160 - bioTextarea.value.length;
             charCount.textContent = remaining;
@@ -127,6 +135,25 @@ class ProfileManager {
             const isValid = /^[a-zA-Z0-9_]*$/.test(value);
             e.target.classList.toggle('invalid', !isValid && value.length > 0);
         });
+
+        // Save button click handler (backup)
+        const saveBtn = document.querySelector('.save-btn');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Save button clicked directly');
+                this.saveProfile();
+            });
+        }
+
+        // Cancel button
+        const cancelBtn = document.querySelector('.cancel-btn');
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.closeModal();
+            });
+        }
     }
 
     populateForm() {
@@ -246,12 +273,16 @@ class ProfileManager {
     }
 
     async saveProfile() {
+        console.log('saveProfile called');
         const displayName = document.getElementById('edit-display-name').value.trim();
         const username = document.getElementById('edit-username').value.trim();
         const bio = document.getElementById('edit-bio').value.trim();
 
+        console.log('Form values:', { displayName, username, bio });
+
         // Validation
         if (!username) {
+            console.log('Username validation failed');
             this.app.showNotification('Uživatelské jméno je povinné', 'error');
             return;
         }
@@ -323,6 +354,7 @@ class ProfileManager {
     }
 
     closeModal() {
+        console.log('closeModal called');
         const backdrop = document.getElementById('profile-modal-backdrop');
         if (backdrop) {
             backdrop.classList.remove('active');
@@ -332,7 +364,13 @@ class ProfileManager {
                 }
                 this.isModalOpen = false;
                 this.pendingAvatarUrl = null;
+                console.log('Modal closed and state reset');
             }, 300);
+        } else {
+            // Reset state even if no backdrop found
+            this.isModalOpen = false;
+            this.pendingAvatarUrl = null;
+            console.log('No backdrop found, but state reset');
         }
     }
 }
