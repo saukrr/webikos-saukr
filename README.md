@@ -1,22 +1,27 @@
-# Webikos - Supabase Auth System
+# Webikos - Twitter-like Social Platform
 
-Moderní autentifikační systém s Supabase integrací pro přihlašování a registraci uživatelů.
+Moderní sociální platforma inspirovaná Twitterem s Supabase integrací.
 
 ## 🚀 Funkce
 
 - ✅ **Email/Password přihlášení a registrace**
-- ✅ **Social Auth** (Google, GitHub) - připraveno k nastavení
+- ✅ **Uživatelská jména** (@username systém)
+- ✅ **Twitter-like interface** s timeline
+- ✅ **Psaní postů** (max 280 znaků)
+- ✅ **Like systém** s real-time počítadlem
+- ✅ **Uživatelské profily** s bio a avatary
 - ✅ **Responsivní design**
 - ✅ **Real-time auth state management**
 - ✅ **Bezpečné session handling**
-- ✅ **Uživatelský dashboard**
+- ✅ **Row Level Security (RLS)**
 
 ## 🛠️ Technologie
 
 - **Frontend**: Vanilla HTML, CSS, JavaScript
-- **Backend**: Supabase (Auth, Database)
+- **Backend**: Supabase (Auth, Database, RLS)
+- **Database**: PostgreSQL s automatickými triggery
 - **Hosting**: Vercel
-- **Styling**: Custom CSS s moderním designem
+- **Styling**: Custom CSS s Twitter-like designem
 
 ## 📋 Nastavení
 
@@ -26,12 +31,37 @@ Projekt je již nakonfigurován s:
 - **URL**: `https://gjfzmbeylksefphagupw.supabase.co`
 - **Region**: US East 1
 
-### 2. Auth nastavení
+### 2. Databázové tabulky
+- **user_profiles**: Uživatelské profily s @username
+- **posts**: Tweety/posty (max 280 znaků)
+- **post_likes**: Like systém s automatickým počítáním
+- **RLS policies**: Bezpečnostní pravidla pro všechny tabulky
+
+### 3. Auth nastavení
 - Email/password auth: ✅ Aktivní
 - Site URL: `https://webikos-saukr.vercel.app`
 - Email confirmations: ✅ Povoleno
+- Automatické vytváření profilů: ✅ Aktivní
 
-### 3. Social Auth (volitelné)
+### 4. Hlavní funkce
+
+**📝 Psaní postů:**
+- Compose box s počítadlem znaků (280 max)
+- Real-time validace
+- Automatické přidání do timeline
+
+**👤 Uživatelské profily:**
+- @username systém (3-20 znaků)
+- Zobrazované jméno
+- Bio text
+- Automatické avatary z iniciál
+
+**❤️ Interakce:**
+- Like/Unlike posty
+- Real-time počítadla
+- Hover efekty
+
+### 5. Social Auth (volitelné)
 Pro aktivaci Google/GitHub přihlášení:
 
 1. **Google OAuth**:

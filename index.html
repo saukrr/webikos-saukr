@@ -181,10 +181,285 @@
 
         .logout-btn {
             background: #e74c3c;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
         }
 
         .logout-btn:hover {
             background: #c0392b;
+        }
+
+        /* Twitter-like App Styles */
+        .app-header {
+            background: white;
+            border-bottom: 1px solid #eee;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .header-content h1 {
+            color: #1da1f2;
+            margin: 0;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-menu span {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .app-main {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            padding: 2rem 1rem;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .user-profile-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-avatar {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .avatar-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .profile-info h3 {
+            margin: 0.5rem 0 0.25rem 0;
+            color: #333;
+        }
+
+        .profile-info p {
+            margin: 0.25rem 0;
+            color: #666;
+        }
+
+        .user-bio {
+            font-size: 0.9rem;
+            margin-top: 0.5rem !important;
+        }
+
+        .feed {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .compose-tweet {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .compose-header h3 {
+            margin: 0 0 1rem 0;
+            color: #333;
+        }
+
+        #tweet-content {
+            width: 100%;
+            border: none;
+            resize: none;
+            font-size: 1.1rem;
+            font-family: inherit;
+            outline: none;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .compose-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .char-count {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .char-count.warning {
+            color: #e74c3c;
+        }
+
+        .tweet-btn {
+            background: #1da1f2;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .tweet-btn:hover {
+            background: #1991db;
+        }
+
+        .tweet-btn:disabled {
+            background: #ccc;
+        }
+
+        .timeline-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .timeline-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .post {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s ease;
+        }
+
+        .post:hover {
+            background: #f8f9fa;
+        }
+
+        .post:last-child {
+            border-bottom: none;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .post-user-info {
+            flex: 1;
+        }
+
+        .post-user-info h4 {
+            margin: 0;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .post-username {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .post-time {
+            color: #999;
+            font-size: 0.8rem;
+        }
+
+        .post-content {
+            margin: 0.75rem 0;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .post-action:hover {
+            background: #f0f0f0;
+        }
+
+        .post-action.liked {
+            color: #e74c3c;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .app-main {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .header-content {
+                padding: 0 1rem;
+            }
+
+            .user-menu span {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -219,6 +494,14 @@
 
             <!-- Register Form -->
             <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="register-username">Uživatelské jméno</label>
+                    <input type="text" id="register-username" placeholder="@saukr" required minlength="3" maxlength="20" pattern="[a-zA-Z0-9_]+" title="Pouze písmena, čísla a podtržítka">
+                </div>
+                <div class="form-group">
+                    <label for="register-display-name">Zobrazované jméno</label>
+                    <input type="text" id="register-display-name" placeholder="Saukr" maxlength="50">
+                </div>
                 <div class="form-group">
                     <label for="register-email">Email</label>
                     <input type="email" id="register-email" required>
@@ -256,21 +539,62 @@
             </div>
         </div>
 
-        <!-- Dashboard Section -->
-        <div id="dashboard-section" class="dashboard">
-            <div class="logo">
-                <h1>Webikos</h1>
-                <p>Vítejte v dashboardu</p>
+        <!-- Twitter-like App Section -->
+        <div id="app-section" class="dashboard">
+            <!-- Header -->
+            <div class="app-header">
+                <div class="header-content">
+                    <h1>Webikos</h1>
+                    <div class="user-menu">
+                        <span id="current-username">@username</span>
+                        <button class="btn logout-btn" onclick="signOut()">Odhlásit se</button>
+                    </div>
+                </div>
             </div>
-            
-            <div class="user-info">
-                <h3>Informace o uživateli</h3>
-                <p><strong>Email:</strong> <span id="user-email"></span></p>
-                <p><strong>ID:</strong> <span id="user-id"></span></p>
-                <p><strong>Přihlášen:</strong> <span id="user-login-time"></span></p>
+
+            <!-- Main Content -->
+            <div class="app-main">
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <div class="user-profile-card">
+                        <div class="profile-avatar">
+                            <div class="avatar-placeholder" id="user-avatar"></div>
+                        </div>
+                        <div class="profile-info">
+                            <h3 id="user-display-name">Display Name</h3>
+                            <p id="user-username-display">@username</p>
+                            <p class="user-bio" id="user-bio">Bio zde...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feed -->
+                <div class="feed">
+                    <!-- Compose Tweet -->
+                    <div class="compose-tweet">
+                        <div class="compose-header">
+                            <h3>Co se děje?</h3>
+                        </div>
+                        <form id="compose-form">
+                            <textarea id="tweet-content" placeholder="Co se děje?" maxlength="280" rows="3"></textarea>
+                            <div class="compose-footer">
+                                <span class="char-count">280</span>
+                                <button type="submit" class="btn tweet-btn">Tweetovat</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="timeline">
+                        <div class="timeline-header">
+                            <h3>Timeline</h3>
+                        </div>
+                        <div id="posts-container">
+                            <!-- Posts will be loaded here -->
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <button class="btn logout-btn" onclick="signOut()">Odhlásit se</button>
         </div>
     </div>
 
@@ -328,28 +652,48 @@
         // Register form handler
         document.getElementById('register-form').addEventListener('submit', async (e) => {
             e.preventDefault()
-            
+
+            const username = document.getElementById('register-username').value.replace('@', '')
+            const displayName = document.getElementById('register-display-name').value
             const email = document.getElementById('register-email').value
             const password = document.getElementById('register-password').value
             const confirmPassword = document.getElementById('register-confirm').value
-            
+
             clearMessages()
-            
+
             if (password !== confirmPassword) {
                 showMessage('register-error', 'Hesla se neshodují!')
                 return
             }
-            
+
             try {
+                // Check if username is available
+                const { data: existingUser } = await supabase
+                    .from('user_profiles')
+                    .select('username')
+                    .eq('username', username)
+                    .single()
+
+                if (existingUser) {
+                    showMessage('register-error', 'Uživatelské jméno již existuje!')
+                    return
+                }
+
                 const { data, error } = await supabase.auth.signUp({
                     email: email,
-                    password: password
+                    password: password,
+                    options: {
+                        data: {
+                            username: username,
+                            display_name: displayName || username
+                        }
+                    }
                 })
-                
+
                 if (error) throw error
-                
+
                 showMessage('register-success', 'Registrace úspěšná! Zkontrolujte email pro potvrzení.')
-                
+
             } catch (error) {
                 showMessage('register-error', error.message)
             }
@@ -410,32 +754,268 @@
             })
         }
 
-        function showDashboard(user) {
+        async function showDashboard(user) {
             document.getElementById('auth-section').style.display = 'none'
-            document.getElementById('dashboard-section').classList.add('active')
-            
-            document.getElementById('user-email').textContent = user.email
-            document.getElementById('user-id').textContent = user.id
-            document.getElementById('user-login-time').textContent = new Date().toLocaleString('cs-CZ')
+            document.getElementById('app-section').classList.add('active')
+
+            // Load or create user profile
+            await loadUserProfile(user)
+
+            // Initialize app
+            initializeApp()
         }
 
         function showAuthSection() {
-            document.getElementById('dashboard-section').classList.remove('active')
+            document.getElementById('app-section').classList.remove('active')
             document.getElementById('auth-section').style.display = 'block'
-            
+
             // Clear forms
             document.querySelectorAll('input').forEach(input => input.value = '')
             clearMessages()
         }
 
         // Listen for auth changes
-        supabase.auth.onAuthStateChange((event, session) => {
+        supabase.auth.onAuthStateChange(async (event, session) => {
             if (event === 'SIGNED_IN') {
-                showDashboard(session.user)
+                await showDashboard(session.user)
             } else if (event === 'SIGNED_OUT') {
                 showAuthSection()
             }
         })
+
+        // Load user profile
+        async function loadUserProfile(user) {
+            try {
+                let { data: profile, error } = await supabase
+                    .from('user_profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single()
+
+                if (error && error.code === 'PGRST116') {
+                    // Profile doesn't exist, create it
+                    const username = user.user_metadata?.username || user.email.split('@')[0]
+                    const displayName = user.user_metadata?.display_name || username
+
+                    const { data: newProfile, error: insertError } = await supabase
+                        .from('user_profiles')
+                        .insert([{
+                            id: user.id,
+                            username: username,
+                            display_name: displayName,
+                            bio: 'Nový uživatel na Webikos!'
+                        }])
+                        .select()
+                        .single()
+
+                    if (insertError) throw insertError
+                    profile = newProfile
+                }
+
+                if (profile) {
+                    updateUserInterface(profile)
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error)
+            }
+        }
+
+        // Update user interface with profile data
+        function updateUserInterface(profile) {
+            document.getElementById('current-username').textContent = `@${profile.username}`
+            document.getElementById('user-display-name').textContent = profile.display_name || profile.username
+            document.getElementById('user-username-display').textContent = `@${profile.username}`
+            document.getElementById('user-bio').textContent = profile.bio || 'Žádné bio'
+
+            // Set avatar
+            const avatarElements = document.querySelectorAll('.avatar-placeholder, .post-avatar')
+            avatarElements.forEach(el => {
+                el.textContent = (profile.display_name || profile.username).charAt(0).toUpperCase()
+            })
+        }
+
+        // Initialize app
+        function initializeApp() {
+            setupComposeTweet()
+            loadPosts()
+        }
+
+        // Setup compose tweet functionality
+        function setupComposeTweet() {
+            const tweetContent = document.getElementById('tweet-content')
+            const charCount = document.querySelector('.char-count')
+            const tweetBtn = document.querySelector('.tweet-btn')
+            const composeForm = document.getElementById('compose-form')
+
+            // Character counter
+            tweetContent.addEventListener('input', () => {
+                const remaining = 280 - tweetContent.value.length
+                charCount.textContent = remaining
+
+                if (remaining < 20) {
+                    charCount.classList.add('warning')
+                } else {
+                    charCount.classList.remove('warning')
+                }
+
+                tweetBtn.disabled = remaining < 0 || tweetContent.value.trim().length === 0
+            })
+
+            // Submit tweet
+            composeForm.addEventListener('submit', async (e) => {
+                e.preventDefault()
+                await postTweet(tweetContent.value.trim())
+                tweetContent.value = ''
+                charCount.textContent = '280'
+                charCount.classList.remove('warning')
+                tweetBtn.disabled = true
+            })
+        }
+
+        // Post a new tweet
+        async function postTweet(content) {
+            if (!content) return
+
+            try {
+                const { data: { user } } = await supabase.auth.getUser()
+                if (!user) return
+
+                const { data, error } = await supabase
+                    .from('posts')
+                    .insert([{
+                        user_id: user.id,
+                        content: content
+                    }])
+                    .select()
+
+                if (error) throw error
+
+                // Reload posts to show the new one
+                loadPosts()
+            } catch (error) {
+                console.error('Error posting tweet:', error)
+            }
+        }
+
+        // Load posts for timeline
+        async function loadPosts() {
+            try {
+                const { data: posts, error } = await supabase
+                    .from('posts')
+                    .select(`
+                        *,
+                        user_profiles (
+                            username,
+                            display_name,
+                            avatar_url
+                        )
+                    `)
+                    .order('created_at', { ascending: false })
+                    .limit(20)
+
+                if (error) throw error
+
+                displayPosts(posts)
+            } catch (error) {
+                console.error('Error loading posts:', error)
+            }
+        }
+
+        // Display posts in timeline
+        function displayPosts(posts) {
+            const container = document.getElementById('posts-container')
+
+            if (posts.length === 0) {
+                container.innerHTML = '<div class="loading">Zatím žádné posty...</div>'
+                return
+            }
+
+            container.innerHTML = posts.map(post => `
+                <div class="post" data-post-id="${post.id}">
+                    <div class="post-header">
+                        <div class="post-avatar">
+                            ${(post.user_profiles?.display_name || post.user_profiles?.username || 'U').charAt(0).toUpperCase()}
+                        </div>
+                        <div class="post-user-info">
+                            <h4>${post.user_profiles?.display_name || post.user_profiles?.username || 'Uživatel'}</h4>
+                            <p class="post-username">@${post.user_profiles?.username || 'unknown'}</p>
+                        </div>
+                        <span class="post-time">${formatTime(post.created_at)}</span>
+                    </div>
+                    <div class="post-content">${escapeHtml(post.content)}</div>
+                    <div class="post-actions">
+                        <div class="post-action like-action" onclick="toggleLike('${post.id}')">
+                            <span>❤️</span>
+                            <span class="like-count">${post.likes_count || 0}</span>
+                        </div>
+                        <div class="post-action">
+                            <span>🔄</span>
+                            <span>${post.retweets_count || 0}</span>
+                        </div>
+                        <div class="post-action">
+                            <span>💬</span>
+                            <span>${post.replies_count || 0}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('')
+        }
+
+        // Toggle like on post
+        async function toggleLike(postId) {
+            try {
+                const { data: { user } } = await supabase.auth.getUser()
+                if (!user) return
+
+                // Check if already liked
+                const { data: existingLike } = await supabase
+                    .from('post_likes')
+                    .select('id')
+                    .eq('user_id', user.id)
+                    .eq('post_id', postId)
+                    .single()
+
+                if (existingLike) {
+                    // Unlike
+                    await supabase
+                        .from('post_likes')
+                        .delete()
+                        .eq('user_id', user.id)
+                        .eq('post_id', postId)
+                } else {
+                    // Like
+                    await supabase
+                        .from('post_likes')
+                        .insert([{
+                            user_id: user.id,
+                            post_id: postId
+                        }])
+                }
+
+                // Reload posts to update counts
+                loadPosts()
+            } catch (error) {
+                console.error('Error toggling like:', error)
+            }
+        }
+
+        // Helper functions
+        function formatTime(timestamp) {
+            const date = new Date(timestamp)
+            const now = new Date()
+            const diff = now - date
+
+            if (diff < 60000) return 'právě teď'
+            if (diff < 3600000) return `${Math.floor(diff / 60000)}m`
+            if (diff < 86400000) return `${Math.floor(diff / 3600000)}h`
+            return date.toLocaleDateString('cs-CZ')
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div')
+            div.textContent = text
+            return div.innerHTML
+        }
     </script>
 </body>
 </html>
