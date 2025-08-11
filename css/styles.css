@@ -6,44 +6,72 @@
     box-sizing: border-box;
 }
 
+/* Twitter/X Exact Color Scheme */
 :root {
-    --twitter-blue: #1da1f2;
-    --twitter-dark-blue: #1991db;
-    --twitter-light-blue: #e8f5fe;
-    --twitter-red: #e0245e;
-    --twitter-green: #17bf63;
-    --twitter-orange: #ff7a00;
-    --twitter-purple: #794bc4;
-    --text-primary: #14171a;
-    --text-secondary: #657786;
-    --text-muted: #aab8c2;
+    /* Primary Twitter/X Colors */
+    --twitter-blue: #1d9bf0;
+    --twitter-blue-hover: #1a8cd8;
+    --twitter-blue-light: rgba(29, 155, 240, 0.1);
+    --twitter-red: #f91880;
+    --twitter-red-hover: #e2165d;
+    --twitter-red-light: rgba(249, 24, 128, 0.1);
+    --twitter-green: #00ba7c;
+    --twitter-green-hover: #00a96e;
+    --twitter-green-light: rgba(0, 186, 124, 0.1);
+
+    /* Light Theme Colors (exact Twitter/X) */
     --background-primary: #ffffff;
     --background-secondary: #f7f9fa;
-    --background-hover: #f7f9fa;
-    --border-color: #e1e8ed;
-    --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    --shadow-medium: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    --border-radius: 16px;
-    --border-radius-small: 8px;
-    --transition: all 0.2s ease-in-out;
-}
+    --background-hover: rgba(0, 0, 0, 0.03);
+    --background-modal: rgba(91, 112, 131, 0.4);
+    --text-primary: #0f1419;
+    --text-secondary: #536471;
+    --text-muted: #657786;
+    --text-link: #1d9bf0;
+    --border-color: #eff3f4;
+    --border-hover: #d0d7de;
 
-/* Dark theme variables */
-:root[data-theme="dark"] {
-    --text-primary: #e6edf3;
-    --text-secondary: #9da8b3;
-    --text-muted: #7d8691;
-    --background-primary: #0d1117;
-    --background-secondary: #0b0f14;
-    --background-hover: #0f1520;
-    --border-color: #1f2a37;
-    --shadow-light: none;
-    --shadow-medium: none;
-    /* App-specific */
+    /* Layout & Spacing */
+    --sidebar-width: 275px;
+    --main-width: 600px;
+    --right-sidebar-width: 350px;
+    --header-height: 53px;
+    --border-radius: 16px;
+    --border-radius-small: 4px;
+    --border-radius-full: 9999px;
+
+    /* Shadows (Twitter/X style) */
+    --shadow-box: rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px;
+    --shadow-elevated: rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px;
+
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.3s ease;
+
+    /* Header */
     --header-bg: rgba(255, 255, 255, 0.85);
 }
 
-/* Dark theme variables */
+/* Dark Theme Colors (exact Twitter/X dark mode) */
+:root[data-theme="dark"] {
+    --background-primary: #000000;
+    --background-secondary: #16181c;
+    --background-hover: rgba(231, 233, 234, 0.1);
+    --background-modal: rgba(91, 112, 131, 0.4);
+    --text-primary: #e7e9ea;
+    --text-secondary: #71767b;
+    --text-muted: #71767b;
+    --text-link: #1d9bf0;
+    --border-color: #2f3336;
+    --border-hover: #3e4144;
+
+    /* Shadows in dark mode */
+    --shadow-box: rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px;
+    --shadow-elevated: rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px;
+
+    /* Header */
+    --header-bg: rgba(0, 0, 0, 0.85);
+}
 :root[data-theme="dark"] {
     --text-primary: #e6edf3;
     --text-secondary: #9da8b3;
@@ -69,12 +97,30 @@
     background: var(--background-hover);
 }
 
+/* Twitter/X Typography System */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--background-secondary);
+    font-family: TwitterChirp, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--background-primary);
     color: var(--text-primary);
-    line-height: 1.5;
+    line-height: 1.3125;
+    font-size: 15px;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
+
+/* Typography Scale (Twitter/X exact) */
+.text-xs { font-size: 13px; line-height: 16px; }
+.text-sm { font-size: 14px; line-height: 18px; }
+.text-base { font-size: 15px; line-height: 20px; }
+.text-lg { font-size: 17px; line-height: 24px; }
+.text-xl { font-size: 20px; line-height: 24px; }
+.text-2xl { font-size: 23px; line-height: 28px; }
+.text-3xl { font-size: 31px; line-height: 36px; }
+
+.font-normal { font-weight: 400; }
+.font-bold { font-weight: 700; }
+.font-black { font-weight: 800; }
 
 /* Auth Section Styles */
 .auth-container {

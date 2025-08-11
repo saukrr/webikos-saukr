@@ -140,29 +140,52 @@ class WebikosApp {
     }
 
     updateUserInterface(profile) {
-        // Update header
-        const currentUsername = document.getElementById('current-username');
-        if (currentUsername) {
-            currentUsername.textContent = `@${profile.username}`;
-        }
+        // Update sidebar user info
+        const sidebarDisplayName = document.getElementById('sidebar-display-name');
+        const sidebarUsername = document.getElementById('sidebar-username');
 
-        // Update sidebar profile
-        const displayName = document.getElementById('user-display-name');
-        const usernameDisplay = document.getElementById('user-username-display');
-        const userBio = document.getElementById('user-bio');
-
-        if (displayName) displayName.textContent = profile.display_name || profile.username;
-        if (usernameDisplay) usernameDisplay.textContent = `@${profile.username}`;
-        if (userBio) userBio.textContent = profile.bio || 'Žádné bio';
+        if (sidebarDisplayName) sidebarDisplayName.textContent = profile.display_name || profile.username || 'User';
+        if (sidebarUsername) sidebarUsername.textContent = `@${profile.username || 'user'}`;
 
         // Set avatars
         this.updateAvatars(profile);
     }
 
     updateAvatars(profile) {
-        const avatarElements = document.querySelectorAll('.avatar-placeholder');
-        const initial = (profile.display_name || profile.username).charAt(0).toUpperCase();
-        
+        // Update specific avatar elements for new layout
+        const sidebarAvatar = document.getElementById('sidebar-avatar');
+        const composeAvatar = document.getElementById('compose-avatar');
+        const avatarElements = document.querySelectorAll('.avatar-placeholder, .user-avatar, .compose-avatar .avatar-placeholder');
+
+        const initial = (profile.display_name || profile.username || 'U').charAt(0).toUpperCase();
+
+        // Update sidebar avatar specifically
+        if (sidebarAvatar) {
+            if (profile.avatar_url) {
+                sidebarAvatar.style.backgroundImage = `url(${profile.avatar_url})`;
+                sidebarAvatar.style.backgroundSize = 'cover';
+                sidebarAvatar.style.backgroundPosition = 'center';
+                sidebarAvatar.textContent = '';
+            } else {
+                sidebarAvatar.textContent = initial;
+                sidebarAvatar.style.backgroundImage = '';
+            }
+        }
+
+        // Update compose avatar specifically
+        if (composeAvatar) {
+            if (profile.avatar_url) {
+                composeAvatar.style.backgroundImage = `url(${profile.avatar_url})`;
+                composeAvatar.style.backgroundSize = 'cover';
+                composeAvatar.style.backgroundPosition = 'center';
+                composeAvatar.textContent = '';
+            } else {
+                composeAvatar.textContent = initial;
+                composeAvatar.style.backgroundImage = '';
+            }
+        }
+
+        // Update all other avatar elements
         avatarElements.forEach(el => {
             if (profile.avatar_url) {
                 el.style.backgroundImage = `url(${profile.avatar_url})`;

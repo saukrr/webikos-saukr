@@ -99,53 +99,101 @@
             </div>
         </div>
 
-        <!-- Twitter-like App Section -->
+        <!-- Twitter/X App Section -->
         <div id="app-section" class="dashboard">
-            <!-- Header -->
-            <div class="app-header">
-                <div class="header-content">
-                    <h1>Webikos</h1>
-                    <div class="user-menu">
-                        <button id="theme-toggle" class="btn" style="width:auto; padding:0.5rem 0.75rem; margin-right:0.5rem;">🌙</button>
-                        <span id="current-username">@username</span>
-                        <button class="btn logout-btn" onclick="window.auth.signOut()">Odhlásit se</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main Content -->
             <div class="app-main">
-                <!-- Sidebar -->
+                <!-- Left Sidebar - Navigation -->
                 <div class="sidebar">
-                    <div class="user-profile-card">
-                        <div class="profile-avatar">
-                            <div class="avatar-placeholder" id="user-avatar"></div>
+                    <div class="sidebar-content">
+                        <!-- Logo -->
+                        <div class="sidebar-logo">
+                            <div class="logo-container">
+                                <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor">
+                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                                </svg>
+                            </div>
                         </div>
-                        <div class="profile-info">
-                            <h3 id="user-display-name">Display Name</h3>
-                            <p id="user-username-display">@username</p>
-                            <p class="user-bio" id="user-bio">Bio zde...</p>
-                            <button class="btn edit-profile-btn" onclick="window.app.openProfileEditModal()">Upravit profil</button>
+
+                        <!-- Navigation Menu -->
+                        <nav class="sidebar-nav">
+                            <a href="#" class="nav-item active">
+                                <div class="nav-icon">🏠</div>
+                                <span class="nav-text">Domů</span>
+                            </a>
+                            <a href="#" class="nav-item">
+                                <div class="nav-icon">🔍</div>
+                                <span class="nav-text">Prozkoumat</span>
+                            </a>
+                            <a href="#" class="nav-item">
+                                <div class="nav-icon">🔔</div>
+                                <span class="nav-text">Oznámení</span>
+                            </a>
+                            <a href="#" class="nav-item">
+                                <div class="nav-icon">✉️</div>
+                                <span class="nav-text">Zprávy</span>
+                            </a>
+                            <a href="#" class="nav-item">
+                                <div class="nav-icon">🔖</div>
+                                <span class="nav-text">Záložky</span>
+                            </a>
+                            <a href="#" class="nav-item" onclick="window.app.openProfileEditModal()">
+                                <div class="nav-icon">👤</div>
+                                <span class="nav-text">Profil</span>
+                            </a>
+                        </nav>
+
+                        <!-- Tweet Button -->
+                        <button class="sidebar-tweet-btn">Tweetovat</button>
+
+                        <!-- User Menu -->
+                        <div class="sidebar-user">
+                            <div class="user-info">
+                                <div class="user-avatar" id="sidebar-avatar"></div>
+                                <div class="user-details">
+                                    <div class="user-name" id="sidebar-display-name">Display Name</div>
+                                    <div class="user-handle" id="sidebar-username">@username</div>
+                                </div>
+                            </div>
+                            <div class="user-menu-dropdown">
+                                <button id="theme-toggle" class="theme-btn">🌙</button>
+                                <button class="logout-btn" onclick="window.auth.signOut()">Odhlásit se</button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Feed -->
-                <div class="feed">
-                    <!-- Compose Tweet -->
-                    <div class="compose-tweet">
-                        <div class="compose-header">
-                            <h3>Co se děje?</h3>
+                <!-- Main Content -->
+                <div class="main-content">
+                    <!-- Header -->
+                    <div class="main-header">
+                        <h1>Domů</h1>
+                        <div class="header-actions">
+                            <!-- Header actions if needed -->
                         </div>
-                        <form id="compose-form">
-                            <textarea id="tweet-content" placeholder="Co se děje?" maxlength="280" rows="3"></textarea>
-                            <div class="compose-footer">
-                                <div class="compose-actions">
-                                    <button type="button" class="media-upload-btn" title="Přidat obrázek">📷</button>
+                    </div>
+
+                    <!-- Compose Tweet -->
+                    <div class="compose-section">
+                        <form id="compose-form" class="compose-form">
+                            <div class="compose-content">
+                                <div class="compose-avatar">
+                                    <div class="avatar-placeholder" id="compose-avatar"></div>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 1rem;">
-                                    <span class="char-count">280</span>
-                                    <button type="submit" class="btn tweet-btn">Tweetovat</button>
+                                <div class="compose-input">
+                                    <textarea id="tweet-content" placeholder="Co se děje?" maxlength="280"></textarea>
+                                    <div class="compose-actions">
+                                        <div class="compose-tools">
+                                            <button type="button" class="tool-btn media-upload-btn" title="Přidat obrázek">
+                                                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                                                    <path d="M3 5.5C3 4.119 4.119 3 5.5 3h13C19.881 3 21 4.119 21 5.5v13c0 1.381-1.119 2.5-2.5 2.5h-13C4.119 21 3 19.881 3 18.5v-13zM5.5 5c-.276 0-.5.224-.5.5v9.086l3-3 3 3 5-5 3 3V5.5c0-.276-.224-.5-.5-.5h-13zM19 15.414l-3-3-5 5-3-3-3 3V18.5c0 .276.224.5.5.5h13c.276 0 .5-.224.5-.5v-3.086zM9.75 7C8.784 7 8 7.784 8 8.75s.784 1.75 1.75 1.75 1.75-.784 1.75-1.75S10.716 7 9.75 7z"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div class="compose-submit">
+                                            <span class="char-count">280</span>
+                                            <button type="submit" class="tweet-btn">Tweetovat</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -153,9 +201,6 @@
 
                     <!-- Timeline -->
                     <div class="timeline">
-                        <div class="timeline-header">
-                            <h3>Timeline</h3>
-                        </div>
                         <div id="posts-container">
                             <!-- Posts will be loaded here -->
                         </div>
@@ -164,34 +209,34 @@
 
                 <!-- Right Sidebar -->
                 <div class="right-sidebar">
-                    <div class="trends-card">
-                        <h3>Trendy pro vás</h3>
+                    <div class="trends-widget">
+                        <h2>Co se děje</h2>
                         <div class="trend-item">
-                            <p class="trend-category">Trendy v České republice</p>
-                            <p class="trend-hashtag">#Webikos</p>
-                            <p class="trend-posts">1,234 tweetů</p>
+                            <div class="trend-category">Trendy v České republice</div>
+                            <div class="trend-name">#Webikos</div>
+                            <div class="trend-volume">1,234 tweetů</div>
                         </div>
                         <div class="trend-item">
-                            <p class="trend-category">Technologie</p>
-                            <p class="trend-hashtag">#JavaScript</p>
-                            <p class="trend-posts">5,678 tweetů</p>
+                            <div class="trend-category">Technologie</div>
+                            <div class="trend-name">#JavaScript</div>
+                            <div class="trend-volume">5,678 tweetů</div>
                         </div>
                         <div class="trend-item">
-                            <p class="trend-category">Sociální sítě</p>
-                            <p class="trend-hashtag">#SocialMedia</p>
-                            <p class="trend-posts">2,345 tweetů</p>
+                            <div class="trend-category">Sociální sítě</div>
+                            <div class="trend-name">#SocialMedia</div>
+                            <div class="trend-volume">2,345 tweetů</div>
                         </div>
                     </div>
 
-                    <div class="suggestions-card">
-                        <h3>Koho sledovat</h3>
+                    <div class="suggestions-widget">
+                        <h2>Koho sledovat</h2>
                         <div class="suggestion-item">
                             <div class="suggestion-avatar">W</div>
                             <div class="suggestion-info">
-                                <h4>Webikos Official</h4>
-                                <p>@webikos</p>
+                                <div class="suggestion-name">Webikos Official</div>
+                                <div class="suggestion-handle">@webikos</div>
                             </div>
-                            <button class="btn follow-btn">Sledovat</button>
+                            <button class="follow-btn">Sledovat</button>
                         </div>
                     </div>
                 </div>
