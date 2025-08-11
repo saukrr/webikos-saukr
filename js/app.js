@@ -181,6 +181,7 @@ class WebikosApp {
         this.setupMediaUpload();
         this.setupProfileEdit();
         this.setupFollowButtons();
+        this.setupThemeToggle();
         this.loadPosts();
         this.setupInfiniteScroll();
     }
@@ -646,6 +647,28 @@ class WebikosApp {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    // Theme toggle (dark/light) with persistence
+    setupThemeToggle() {
+        const applyTheme = (theme) => {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('webikos_theme', theme);
+            const toggle = document.getElementById('theme-toggle');
+            if (toggle) toggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+        };
+
+        const stored = localStorage.getItem('webikos_theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(stored || (prefersDark ? 'dark' : 'light'));
+
+        const btn = document.getElementById('theme-toggle');
+        if (btn) {
+            btn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme') || 'light';
+                applyTheme(current === 'dark' ? 'light' : 'dark');
+            });
+        }
     }
 }
 

@@ -28,6 +28,19 @@
     --transition: all 0.2s ease-in-out;
 }
 
+/* Dark theme variables */
+:root[data-theme="dark"] {
+    --text-primary: #e6edf3;
+    --text-secondary: #9da8b3;
+    --text-muted: #7d8691;
+    --background-primary: #0d1117;
+    --background-secondary: #0b0f14;
+    --background-hover: #0f1520;
+    --border-color: #1f2a37;
+    --shadow-light: none;
+    --shadow-medium: none;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background: var(--background-secondary);
