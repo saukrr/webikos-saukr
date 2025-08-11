@@ -116,27 +116,27 @@
 
                         <!-- Navigation Menu -->
                         <nav class="sidebar-nav">
-                            <a href="#" class="nav-item active">
+                            <a href="#" class="nav-item active" data-section="home" onclick="window.app.showSection('home')">
                                 <div class="nav-icon">🏠</div>
                                 <span class="nav-text">Domů</span>
                             </a>
-                            <a href="#" class="nav-item">
+                            <a href="#" class="nav-item" data-section="explore" onclick="window.app.showSection('explore')">
                                 <div class="nav-icon">🔍</div>
                                 <span class="nav-text">Prozkoumat</span>
                             </a>
-                            <a href="#" class="nav-item">
+                            <a href="#" class="nav-item" data-section="notifications" onclick="window.app.showSection('notifications')">
                                 <div class="nav-icon">🔔</div>
                                 <span class="nav-text">Oznámení</span>
                             </a>
-                            <a href="#" class="nav-item">
+                            <a href="#" class="nav-item" data-section="messages" onclick="window.app.showSection('messages')">
                                 <div class="nav-icon">✉️</div>
                                 <span class="nav-text">Zprávy</span>
                             </a>
-                            <a href="#" class="nav-item">
+                            <a href="#" class="nav-item" data-section="bookmarks" onclick="window.app.showSection('bookmarks')">
                                 <div class="nav-icon">🔖</div>
                                 <span class="nav-text">Záložky</span>
                             </a>
-                            <a href="#" class="nav-item" onclick="window.app.openProfileEditModal()">
+                            <a href="#" class="nav-item" data-section="profile" onclick="window.app.showSection('profile')">
                                 <div class="nav-icon">👤</div>
                                 <span class="nav-text">Profil</span>
                             </a>
@@ -199,10 +199,111 @@
                         </form>
                     </div>
 
-                    <!-- Timeline -->
-                    <div class="timeline">
-                        <div id="posts-container">
-                            <!-- Posts will be loaded here -->
+                    <!-- Home Section -->
+                    <div id="home-section" class="content-section active">
+                        <div class="timeline">
+                            <div id="posts-container">
+                                <!-- Posts will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Explore Section -->
+                    <div id="explore-section" class="content-section">
+                        <div class="explore-content">
+                            <div class="search-trends">
+                                <h2>Trendy pro vás</h2>
+                                <div class="trend-item">
+                                    <div class="trend-category">Trendy v České republice</div>
+                                    <div class="trend-name">#Webikos</div>
+                                    <div class="trend-volume">1,234 tweetů</div>
+                                </div>
+                                <div class="trend-item">
+                                    <div class="trend-category">Technologie</div>
+                                    <div class="trend-name">#JavaScript</div>
+                                    <div class="trend-volume">5,678 tweetů</div>
+                                </div>
+                                <div class="trend-item">
+                                    <div class="trend-category">Sociální sítě</div>
+                                    <div class="trend-name">#SocialMedia</div>
+                                    <div class="trend-volume">2,345 tweetů</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Section -->
+                    <div id="notifications-section" class="content-section">
+                        <div class="notifications-content">
+                            <div class="notification-item">
+                                <div class="notification-icon">❤️</div>
+                                <div class="notification-text">
+                                    <strong>webikos_user</strong> se líbí váš tweet
+                                </div>
+                                <div class="notification-time">2h</div>
+                            </div>
+                            <div class="notification-item">
+                                <div class="notification-icon">🔄</div>
+                                <div class="notification-text">
+                                    <strong>another_user</strong> retweetoval váš příspěvek
+                                </div>
+                                <div class="notification-time">5h</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Messages Section -->
+                    <div id="messages-section" class="content-section">
+                        <div class="messages-content">
+                            <div class="empty-state">
+                                <h2>Vítejte ve zprávách!</h2>
+                                <p>Zatím nemáte žádné zprávy. Začněte konverzaci!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bookmarks Section -->
+                    <div id="bookmarks-section" class="content-section">
+                        <div class="bookmarks-content">
+                            <div class="empty-state">
+                                <h2>Uložte tweety na později</h2>
+                                <p>Zatím nemáte žádné záložky. Klikněte na ikonu záložky u tweetu pro uložení.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Section -->
+                    <div id="profile-section" class="content-section">
+                        <div class="profile-content">
+                            <div class="profile-header">
+                                <div class="profile-banner"></div>
+                                <div class="profile-info">
+                                    <div class="profile-avatar-large">
+                                        <div class="avatar-placeholder" id="profile-avatar-large"></div>
+                                    </div>
+                                    <div class="profile-actions">
+                                        <button class="btn edit-profile-btn" onclick="window.profileManager.openEditModal()">Upravit profil</button>
+                                    </div>
+                                </div>
+                                <div class="profile-details">
+                                    <h1 id="profile-display-name">Display Name</h1>
+                                    <p id="profile-username">@username</p>
+                                    <p id="profile-bio">Bio zde...</p>
+                                    <div class="profile-stats">
+                                        <span><strong>0</strong> Sleduje</span>
+                                        <span><strong>0</strong> Sledujících</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-tabs">
+                                <div class="tab active">Tweety</div>
+                                <div class="tab">Odpovědi</div>
+                                <div class="tab">Média</div>
+                                <div class="tab">Líbí se</div>
+                            </div>
+                            <div class="profile-posts" id="profile-posts">
+                                <!-- User's posts will be loaded here -->
+                            </div>
                         </div>
                     </div>
                 </div>

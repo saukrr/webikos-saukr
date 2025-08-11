@@ -31,10 +31,10 @@
     --border-color: #eff3f4;
     --border-hover: #d0d7de;
 
-    /* Layout & Spacing */
-    --sidebar-width: 275px;
+    /* Layout & Spacing (Twitter/X exact) */
+    --sidebar-width: 260px;
     --main-width: 600px;
-    --right-sidebar-width: 350px;
+    --right-sidebar-width: 290px;
     --header-height: 53px;
     --border-radius: 16px;
     --border-radius-small: 4px;

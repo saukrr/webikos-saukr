@@ -205,6 +205,7 @@ class WebikosApp {
         this.setupProfileEdit();
         this.setupFollowButtons();
         this.setupThemeToggle();
+        this.setupNavigation();
         this.loadPosts();
         this.setupInfiniteScroll();
     }
@@ -672,6 +673,125 @@ class WebikosApp {
         return div.innerHTML;
     }
 
+    // Navigation between sections
+    setupNavigation() {
+        this.currentSection = 'home';
+    }
+
+    showSection(sectionName) {
+        // Hide all sections
+        const sections = document.querySelectorAll('.content-section');
+        sections.forEach(section => section.classList.remove('active'));
+
+        // Show selected section
+        const targetSection = document.getElementById(`${sectionName}-section`);
+        if (targetSection) {
+            targetSection.classList.add('active');
+        }
+
+        // Update navigation active state
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => item.classList.remove('active'));
+
+        const activeNavItem = document.querySelector(`[data-section="${sectionName}"]`);
+        if (activeNavItem) {
+            activeNavItem.classList.add('active');
+        }
+
+        // Update header title
+        const headerTitle = document.querySelector('.main-header h1');
+        if (headerTitle) {
+            const titles = {
+                'home': 'Domů',
+                'explore': 'Prozkoumat',
+                'notifications': 'Oznámení',
+                'messages': 'Zprávy',
+                'bookmarks': 'Záložky',
+                'profile': 'Profil'
+            };
+            headerTitle.textContent = titles[sectionName] || 'Webikos';
+        }
+
+        // Load section-specific content
+        this.loadSectionContent(sectionName);
+        this.currentSection = sectionName;
+    }
+
+    loadSectionContent(sectionName) {
+        switch(sectionName) {
+            case 'home':
+                // Posts are already loaded
+                break;
+            case 'profile':
+                this.loadProfileSection();
+                break;
+            case 'explore':
+                // Load trending topics
+                break;
+            case 'notifications':
+                // Load notifications
+                break;
+            case 'messages':
+                // Load messages
+                break;
+            case 'bookmarks':
+                // Load bookmarks
+                break;
+        }
+    }
+
+    loadProfileSection() {
+        if (this.currentProfile) {
+            // Update profile section with current user data
+            const profileDisplayName = document.getElementById('profile-display-name');
+            const profileUsername = document.getElementById('profile-username');
+            const profileBio = document.getElementById('profile-bio');
+            const profileAvatarLarge = document.getElementById('profile-avatar-large');
+
+            if (profileDisplayName) profileDisplayName.textContent = this.currentProfile.display_name || this.currentProfile.username || 'User';
+            if (profileUsername) profileUsername.textContent = `@${this.currentProfile.username || 'user'}`;
+            if (profileBio) profileBio.textContent = this.currentProfile.bio || 'Žádné bio';
+
+            if (profileAvatarLarge) {
+                const initial = (this.currentProfile.display_name || this.currentProfile.username || 'U')[0].toUpperCase();
+                profileAvatarLarge.textContent = initial;
+            }
+
+            // Load user's posts in profile
+            this.loadUserPosts();
+        }
+    }
+
+    async loadUserPosts() {
+        if (!this.currentUser) return;
+
+        try {
+            const { data: posts, error } = await this.supabase
+                .from('posts')
+                .select('*')
+                .eq('user_id', this.currentUser.id)
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            const profilePostsContainer = document.getElementById('profile-posts');
+            if (profilePostsContainer && posts) {
+                if (posts.length === 0) {
+                    profilePostsContainer.innerHTML = '<div class="empty-state"><h2>Zatím žádné tweety</h2><p>Když něco tweetujete, objeví se to zde.</p></div>';
+                } else {
+                    // Render user's posts
+                    const postsWithProfiles = posts.map(post => ({
+                        ...post,
+                        user_profiles: this.currentProfile
+                    }));
+                    profilePostsContainer.innerHTML = postsWithProfiles.map(post => this.renderPost(post)).join('');
+                }
+            }
+        } catch (error) {
+            console.error('Error loading user posts:', error);
+        }
+    }
+
     // Theme toggle (dark/light) with persistence
     setupThemeToggle() {
         const applyTheme = (theme) => {
@@ -894,5 +1014,12 @@ window.reloadProfile = async () => {
     } else {
         console.warn('No current user available for profile reload');
         return null;
+    }
+};
+
+// Global navigation function
+window.showSection = (sectionName) => {
+    if (window.app) {
+        window.app.showSection(sectionName);
     }
 };
