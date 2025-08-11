@@ -332,14 +332,7 @@ class WebikosApp {
             const { data, error } = await this.supabase
                 .from('posts')
                 .insert([postData])
-                .select(`
-                    *,
-                    user_profiles!user_id (
-                        username,
-                        display_name,
-                        avatar_url
-                    )
-                `);
+                .select('*');
 
             if (error) throw error;
 
@@ -391,22 +384,22 @@ class WebikosApp {
     async loadPosts(offset = 0, limit = 20) {
         console.log('Loading posts...', { offset, limit });
         try {
-            const { data: posts, error } = await this.supabase
-                .from('posts')
-                .select(`
-                    *,
-                    user_profiles!user_id (
-                        username,
-                        display_name,
-                        avatar_url
-                    )
-                `)
-                .order('created_at', { ascending: false })
-                .range(offset, offset + limit - 1);
+            // Use direct REST API call to avoid Supabase-js JOIN syntax issues
+            const accessToken = (await this.supabase.auth.getSession()).data.session?.access_token;
+            const response = await fetch(`${window.SUPABASE_URL}/rest/v1/posts?select=*,user_profiles(username,display_name,avatar_url)&order=created_at.desc&limit=${limit}&offset=${offset}`, {
+                headers: {
+                    'apikey': window.SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
 
-            console.log('Posts query result:', { posts, error });
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
 
-            if (error) throw error;
+            const posts = await response.json();
+            console.log('Posts query result:', { posts, error: null });
 
             if (offset === 0) {
                 this.posts = posts || [];
@@ -418,7 +411,7 @@ class WebikosApp {
             this.renderPosts();
         } catch (error) {
             console.error('Error loading posts:', error);
-            this.showNotification('Chyba při načítání postů', 'error');
+            this.showNotification('Chyba při načítání postů: ' + error.message, 'error');
         }
     }
 
