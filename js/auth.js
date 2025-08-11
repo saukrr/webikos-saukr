@@ -270,7 +270,22 @@ class AuthManager {
                 throw error;
             }
             console.log('✅ User signed out successfully');
+            // Clear any stored session flags
             this.clearStoredSession();
+            // Proactively reset UI and app state (don't rely solely on onAuthStateChange)
+            this.currentUser = null;
+            try {
+                if (window.app) {
+                    window.app.currentUser = null;
+                    window.app.currentProfile = null;
+                    window.app.posts = [];
+                    const postsContainer = document.getElementById('posts-container');
+                    if (postsContainer) postsContainer.innerHTML = '';
+                }
+            } catch (e) {
+                console.warn('Non-critical error while resetting app state on sign out:', e);
+            }
+            this.showAuthSection();
         } catch (error) {
             console.error('💥 Critical sign out error:', error);
             // Force logout even if there's an error

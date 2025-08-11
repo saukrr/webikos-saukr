@@ -134,11 +134,12 @@ class WebikosApp {
     async loadProfileFallback(userId) {
         console.log('Using fallback profile loading method...');
         try {
-            // Use direct REST API call as fallback
-            const response = await fetch(`${this.supabase.supabaseUrl}/rest/v1/user_profiles?id=eq.${userId}&select=*`, {
+            // Use direct REST API call as fallback (v2 client does not expose supabaseKey; use globals set in index.html)
+            const accessToken = (await this.supabase.auth.getSession()).data.session?.access_token;
+            const response = await fetch(`${window.SUPABASE_URL}/rest/v1/user_profiles?id=eq.${userId}&select=*`, {
                 headers: {
-                    'apikey': this.supabase.supabaseKey,
-                    'Authorization': `Bearer ${this.supabase.auth.session()?.access_token}`,
+                    'apikey': window.SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${accessToken}`,
                     'Content-Type': 'application/json'
                 }
             });
