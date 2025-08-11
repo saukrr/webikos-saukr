@@ -133,10 +133,29 @@ class ProfileManager {
         console.log('Populating form with profile:', this.app.currentProfile);
         if (!this.app.currentProfile) {
             console.warn('No current profile available for form population');
+            // Try to reload the profile
+            if (this.app.currentUser) {
+                console.log('Attempting to reload user profile...');
+                this.app.loadUserProfile(this.app.currentUser).then(() => {
+                    if (this.app.currentProfile) {
+                        console.log('Profile reloaded successfully, populating form...');
+                        this.populateFormWithProfile(this.app.currentProfile);
+                    } else {
+                        console.error('Failed to reload profile');
+                        this.app.showNotification('Chyba při načítání profilu. Zkuste obnovit stránku.', 'error');
+                    }
+                }).catch(error => {
+                    console.error('Error reloading profile:', error);
+                    this.app.showNotification('Chyba při načítání profilu. Zkuste obnovit stránku.', 'error');
+                });
+            }
             return;
         }
 
-        const profile = this.app.currentProfile;
+        this.populateFormWithProfile(this.app.currentProfile);
+    }
+
+    populateFormWithProfile(profile) {
         
         document.getElementById('edit-display-name').value = profile.display_name || '';
         document.getElementById('edit-username').value = profile.username || '';
@@ -244,6 +263,13 @@ class ProfileManager {
 
         if (!/^[a-zA-Z0-9_]+$/.test(username)) {
             this.app.showNotification('Uživatelské jméno může obsahovat pouze písmena, čísla a podtržítka', 'error');
+            return;
+        }
+
+        // Check if we have a current profile
+        if (!this.app.currentProfile) {
+            console.error('No current profile available for saving');
+            this.app.showNotification('Chyba: Profil není načten. Zkuste obnovit stránku.', 'error');
             return;
         }
 

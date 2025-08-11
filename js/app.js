@@ -18,13 +18,21 @@ class WebikosApp {
         document.body.className = 'app-page';
 
         console.log('Loading user profile...');
-        // Load user profile
-        await this.loadUserProfile(user);
+        try {
+            // Load user profile
+            await this.loadUserProfile(user);
 
-        console.log('Initializing app...');
-        // Initialize app
-        this.initializeApp();
-        console.log('Dashboard setup complete');
+            console.log('Initializing app...');
+            // Initialize app
+            this.initializeApp();
+            console.log('Dashboard setup complete');
+        } catch (error) {
+            console.error('Error setting up dashboard:', error);
+            this.showNotification('Chyba při načítání aplikace. Zkuste obnovit stránku.', 'error');
+
+            // Still initialize the app even if profile loading failed
+            this.initializeApp();
+        }
     }
 
     async loadUserProfile(user) {
@@ -57,8 +65,14 @@ class WebikosApp {
                     .single();
 
                 console.log('Profile creation result:', { newProfile, insertError });
-                if (insertError) throw insertError;
+                if (insertError) {
+                    console.error('Failed to create profile:', insertError);
+                    throw insertError;
+                }
                 profile = newProfile;
+            } else if (error) {
+                console.error('Error querying profile:', error);
+                throw error;
             }
 
             if (profile) {
@@ -73,13 +87,16 @@ class WebikosApp {
 
                 this.updateUserInterface(profile);
                 console.log('Profile loaded successfully');
+                return profile;
             } else {
                 console.warn('No profile data received');
+                throw new Error('No profile data received from database');
             }
         } catch (error) {
             console.error('Error loading profile:', error);
             // Show error message to user
-            this.showNotification('Chyba při načítání profilu', 'error');
+            this.showNotification('Chyba při načítání profilu: ' + error.message, 'error');
+            throw error; // Re-throw so calling code can handle it
         }
     }
 
@@ -761,4 +778,22 @@ window.webikosDebug = () => {
         posts: window.app?.posts?.length || 0,
         elements
     };
+};
+
+// Helper function to manually reload profile
+window.reloadProfile = async () => {
+    if (window.app && window.app.currentUser) {
+        console.log('Manually reloading profile...');
+        try {
+            await window.app.loadUserProfile(window.app.currentUser);
+            console.log('Profile reloaded successfully');
+            return window.app.currentProfile;
+        } catch (error) {
+            console.error('Failed to reload profile:', error);
+            return null;
+        }
+    } else {
+        console.warn('No current user available for profile reload');
+        return null;
+    }
 };
